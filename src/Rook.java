@@ -1,20 +1,17 @@
-/* TO DO: B and G Column exceptions and Remove Row Exceptions */
-
-
 // Import List/ArrayList for keeping track of legal moves
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Bishop extends Piece{
-	// constant holding vector values for all 4 directions of bishop movement
-	private static final int[] DIRECTIONAL_VECTORS  = {-9, -7, 7, 9};
+public class Rook extends Piece {
+	// constant holding vector values for all 4 directions of Rook movement
+	private static final int[] DIRECTIONAL_VECTORS  = {-8, 8, -1, 1};
     
-    // Constructor for Bishop, inherits from Piece super
-    Bishop(final int pieceLocation, final Side color) {
+    // Constructor for Rook, inherits from Piece super
+    Rook(final int pieceLocation, final Side color) {
         super(pieceLocation, color);
     }
-
+    
     @Override
     public Collection<Move> getLegalMoves(Board board) {
  
@@ -48,10 +45,10 @@ public class Bishop extends Piece{
         					// if it is an opponents piece, it can be captured
         					// but there will be no further potential moves down this vector 
 	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSqaure));
-	                        break;
+	                        break; // break from while loop
         				} else {
         					// This is not a legal move and there are no further potential moves
-        					// along this vector 
+        					// along this vector, break from while loop
         					break;
         				}
         			}
@@ -62,19 +59,16 @@ public class Bishop extends Piece{
         return Collections.unmodifiableList(legalMoves);
     }
     
-    // exception for Column A edge cases
-	private static boolean isColumnAException(final int currentLocation, final int currentOffset ) {
-		// if bishop is in column A it cannot move to the left
-		return GameUtilities.COLUMN_A(currentLocation) && (currentOffset == 7 || currentOffset == -9);
+    
+    // Edge case checking 
+    private static boolean isColumnAException(final int currentLocation, final int currentOffset ) {
+		// if rook is in column A it cannot move to the left
+		return GameUtilities.COLUMN_A(currentLocation) && (currentOffset == -1);
 	}
-	
-	// exception for Column B edge cases 
+
+	// exception for Column H edge cases 
 	private static boolean isColumnHException(final int currentLocation, final int currentOffset ) {
-		// if bishop is in Column B it cannot move to the right 
-		return GameUtilities.COLUMN_H(currentLocation) && (currentOffset == -7 || currentOffset == 9);
+		// if rook is in Column H it cannot move to the right 
+		return GameUtilities.COLUMN_H(currentLocation) && (currentOffset == 1);
 	}
 }
-
-// Write general method for checking and adding moves in all four directions
-// Something like private void getDirectionMoves(List legalMoves, int positionTracker, int incramentValue, char edgeColumn)
-
