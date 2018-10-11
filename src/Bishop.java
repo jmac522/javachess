@@ -17,127 +17,63 @@ public class Bishop extends Piece{
 
     @Override
     public Collection<Move> getLegalMoves(Board board) {
-    	// Declare a list to hold all POTENTIAL moves a bishop can make on the board
-    	// based on its current position 
-        final List<int> potentialMoves = new ArrayList<>();
+ 
         
         // ArrayList to hold found legal moves among potential bishop moves
         final List<Move> legalMoves = new ArrayList<>();
         
-        
-        // REFACTOR THESE INTO METHODS
-        // CONSIDER directly adding to legal moves
-        //Start by examining up-right movement by incramenting by 7 until reaching 
-        // column H 
-        int upRightTracker = this.locationOnBoard;
-        boolean hitPiece = false;
-        // if the current position is not on column H and we havent hit an obstructing piece
-        // add the upper right square from current position to 
-        // potential moves list 
-        if (!GameUtilities.COLUMN_H(upRightTracker) && !hitPiece) {
-        	upRightTracker -= 7; // set tracker to square to upper right
-        	 // get the BoardSquare that is at the current potential move location
-            final BoardSquare potentialMoveSquare = board.getSquare(upRightTracker);
-            // if the square is not occupied we can add the square as a potential location
-            if (!potentialMoveSquare.isOccupied()) {
-            	// if the square is not occupied
-                potentialMoves.add(upRightTracker); // stubbed move object, expand later
-            } else {
-            	// if the square IS occupied check the side of the piece
-                final Piece pieceOnSquare = potentialMoveSquare.getPiece();
-                final Side pieceColor = pieceOnSquare.getColor();
-                if (this.color != pieceColor) {
-                	// if it is an opponents piece, add to list and mark hit piece true
-                	potentialMoves.add(upRightTracker);
-                	hitPiece = true;
-                } else {
-                	hitPiece = true;
-                }
-            }
+        // go through each of the 4 vectors to evaluate legal moves 
+        for (int directionalVectorOffset : DIRECTIONAL_VECTORS) {
+        	// set current move to pieces position 
+        	int currentPotentialMove = this.locationOnBoard;
+        	// while the current potential move is a Valid Board location increment by the vector
+        	while (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
+        		currentPotentialMove += directionalVectorOffset;
+        		// if the new position is a valid move and does not fail any edge case exceptions
+        		// add appropriate move to legal moves list 
+        		if (GameUtilities.isValidBoardLocation(currentPotentialMove) &&
+        		       !isColumnHException(currentPotentialMove, directionalVectorOffset) &&
+        		       !isColumnAException(currentPotetnailMove, directionalVectorOffset)) {
+        		     // get the boardsquare object of the current potential move
+        			final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+        			
+        			if (!potentialMoveSquare.isOccupied()) {
+        				// if the square is not occupied, add it to the legal moves
+        				legalMoves.add(new PassiveMove(board, this, currentPotentialMove));
+        			} else {
+        				// if the square is occupied get the piece occupying the square and its side
+        				final Piece pieceOnSquare = potentialMoveSquare.getPiece();
+        				final Side pieceColor = pieceOnSquare.getColor();
+        				if (this.color != pieceColor) {
+        					// if it is an opponents piece, it can be captured
+        					// but there will be no further potential moves down this vector 
+	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSqaure));
+	                        break;
+        				} else {
+        					// This is not a legal move and there are no further potential moves
+        					// along this vector 
+        					break;
+        				}
+        			}
+        		}      		
+        	}
         }
-        
-        // Examining bottom right movement, using same process
-        int bottomRightTracker = this.locationOnBoard;
-        hitPiece = false;
-        if (!GameUtilities.COLUMN_H(bottomRightTracker) && !hitPiece) {
-        	bottomRightTracker += 9;
-        	final BoardSquare potentialMoveSquare = board.getSquare(bottomRightTracker);
-            // if the square is not occupied we can add the square as a potential location
-            if (!potentialMoveSquare.isOccupied()) {
-            	// if the square is not occupied
-                potentialMoves.add(bottomRightTracker); // stubbed move object, expand later
-            } else {
-            	// if the square IS occupied check the side of the piece
-                final Piece pieceOnSquare = potentialMoveSquare.getPiece();
-                final Side pieceColor = pieceOnSquare.getColor();
-                if (this.color != pieceColor) {
-                	// if it is an opponents piece, add to list and mark hit piece true
-                	potentialMoves.add(bottomRightTracker);
-                	hitPiece = true;
-                } else {
-                	hitPiece = true;
-                }
-            }
-        }
-       
-       
-        // Examining bottom left movement, using same process
-        int bottomLeftTracker = this.locationOnBoard;
-        hitPiece = false;
-        if (!GameUtilities.COLUMN_A(bottomLeftTracker) && !hitPiece) {
-        	bottomRightTracker += 7;
-        	final BoardSquare potentialMoveSquare = board.getSquare(bottomLeftTracker);
-            // if the square is not occupied we can add the square as a potential location
-            if (!potentialMoveSquare.isOccupied()) {
-            	// if the square is not occupied
-                potentialMoves.add(bottomLeftTracker); // stubbed move object, expand later
-            } else {
-            	// if the square IS occupied check the side of the piece
-                final Piece pieceOnSquare = potentialMoveSquare.getPiece();
-                final Side pieceColor = pieceOnSquare.getColor();
-                if (this.color != pieceColor) {
-                	// if it is an opponents piece, add to list and mark hit piece true
-                	potentialMoves.add(bottomLeftTracker);
-                	hitPiece = true;
-                } else {
-                	hitPiece = true;
-                }
-            }
-        }
-        
-        int upLeftTracker = this.locationOnBoard;
-        hitPiece = false;
-        // check up left moves
-        if (!GameUtilities.COLUMN_A(upLeftTracker) && !hitPiece) {
-        	upLeftTracker -= 9; // set tracker to square to upper right
-        	 // get the BoardSquare that is at the current potential move location
-            final BoardSquare potentialMoveSquare = board.getSquare(upLeftTracker);
-            // if the square is not occupied we can add the square as a potential location
-            if (!potentialMoveSquare.isOccupied()) {
-            	// if the square is not occupied
-                potentialMoves.add(upLeftTracker);
-                // add to legal moves as passive move 
-                // legalMoves.add(new PassiveMove(board, this, upLeftTracker));
-            } else {
-            	// if the square IS occupied check the side of the piece
-                final Piece pieceOnSquare = potentialMoveSquare.getPiece();
-                final Side pieceColor = pieceOnSquare.getColor();
-                if (this.color != pieceColor) {
-                	// if it is an opponents piece, add to list and mark hit piece true
-                	potentialMoves.add(upLeftTracker);
-                	// add to legal moves as capture move
-                	// legalMoves.add(new CaptureMove(board, this, upLeftTracker, pieceOnSquare))
-                	hitPiece = true;
-                } else {
-                	hitPiece = true;
-                }
-            }
-        }
-
-        // Return an unmodifiable collection containing the legal moves list
+       // Return an unmodifiable collection containing the legal moves list
         return Collections.unmodifiableList(legalMoves);
     }
 }
 
 // Write general method for checking and adding moves in all four directions
 // Something like private void getDirectionMoves(List legalMoves, int positionTracker, int incramentValue, char edgeColumn)
+
+// exception for Column A edge cases
+private static boolean isColumnAException(final int currentLocation, final int currentOffset ) {
+	// if bishop is in column A it cannot move to the left
+	return GameUtilities.COLUMN_A(currentLocation) && (currentOffset == 7 || currentOffset == -9);
+}
+
+// exception for Column B edge cases 
+private static boolean isColumnHException(final int currentLocation, final int currentOffset ) {
+	// if bishop is in Column B it cannot move to the right 
+	return GameUtilities.COLUMN_H(currentLocation) && (currentOffset == -7 || currentOffset == 9);
+}
