@@ -18,7 +18,7 @@ public class Knight extends Piece{
     }
 
     @Override
-    public List<Move> getLegalMoves(Board board) {
+    public Collection<Move> getLegalMoves(Board board) {
         // integer to keep track of the location we're currently examining
         int currentPotentialMove;
 

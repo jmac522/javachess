@@ -15,7 +15,7 @@ public class Bishop extends Piece{
     }
 
     @Override
-    public List<Move> getLegalMoves(Board board) {
+    public Collection<Move> getLegalMoves(Board board) {
     	// Declare a list to hold all POTENTIAL moves a bishop can make on the board
     	// based on its current position 
         final List<int> potentialMoves = new ArrayList<>();

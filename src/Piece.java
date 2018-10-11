@@ -29,7 +29,7 @@ public abstract class Piece {
     }
 
     // Abstract method for returning a list of legal moves. Will be overridden for specific Piece subclasses
-    public abstract List<Move> getLegalMoves(final Board board);
+    public abstract Collection<Move> getLegalMoves(final Board board);
 
 
     // Method to determine if a passed location is a valid location on board from 0-63
