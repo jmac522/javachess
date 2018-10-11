@@ -41,7 +41,7 @@ public class Knight extends Piece{
                 final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
 
                 if (!potentialMoveSquare.isOccupied()) {
-                    legalMoves.add(new Move()); // stubbed move object, expand later
+                    legalMoves.add(new PassiveMove(board, this, currentPotentialMove)); // stubbed move object, expand later
                 } else {
                     // if the potential square IS occupied, get the piece that is currently on that square and its
                     // color
@@ -52,7 +52,7 @@ public class Knight extends Piece{
                     // If the piece on the potential move square is not the same color as the knight, add this
                     // square as a potential legal move
                     if (this.color != pieceColor) {
-                        legalMoves.add(new Move()); // stubbed move object, expand later
+                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSqaure));
                     }
                 }
             }

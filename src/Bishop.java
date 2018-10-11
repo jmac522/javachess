@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Bishop extends Piece{
-
-
+	// constant holding vector values for all 4 directions of bishop movement
+	private static final int[] DIRECTIONAL_VECTORS  = {-9, -7, 7, 9};
+    
     // Constructor for Bishop, inherits from Piece super
     Bishop(final int pieceLocation, final Side color) {
         super(pieceLocation, color);
@@ -116,7 +117,7 @@ public class Bishop extends Piece{
             	// if the square is not occupied
                 potentialMoves.add(upLeftTracker);
                 // add to legal moves as passive move 
-                // legalMoves.add(new Move());
+                // legalMoves.add(new PassiveMove(board, this, upLeftTracker));
             } else {
             	// if the square IS occupied check the side of the piece
                 final Piece pieceOnSquare = potentialMoveSquare.getPiece();
@@ -125,7 +126,7 @@ public class Bishop extends Piece{
                 	// if it is an opponents piece, add to list and mark hit piece true
                 	potentialMoves.add(upLeftTracker);
                 	// add to legal moves as capture move
-                	// legalMoves.add(new Move())
+                	// legalMoves.add(new CaptureMove(board, this, upLeftTracker, pieceOnSquare))
                 	hitPiece = true;
                 } else {
                 	hitPiece = true;
