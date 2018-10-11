@@ -19,23 +19,23 @@ public class GameUtilities {
                                                false , false, false, false, false, false, false, true, // 2
                                                false , false, false, false, false, false, false, true } ; // 1
 
-    public static final boolean[] ROW_ONE = { false , false, false, false, false, false, false, false, // 8
+    public static final boolean[] COLUMN_B = { false , false, false, false, false, false, false, false, // 8
                                               false , false, false, false, false, false, false, false, // 7
                                               false , false, false, false, false, false, false, false, // 6
                                               false , false, false, false, false, false, false, false, // 5
                                               false , false, false, false, false, false, false, false, // 4
                                               false , false, false, false, false, false, false, false, // 3
                                               false , false, false, false, false, false, false, false, // 2
-                                              true  , true , true , true , true , true , true , true } ; // 1
+                                              false  , false, false, false, false, false, false, false } ; // 1
 
-    public static final boolean[] ROW_EIGHT = { true  , true , true , true , true , true , true , true , // 8
-                                                false , false, false, false, false, false, false, false, // 7
-                                                false , false, false, false, false, false, false, false, // 6
-                                                false , false, false, false, false, false, false, false, // 5
-                                                false , false, false, false, false, false, false, false, // 4
-                                                false , false, false, false, false, false, false, false, // 3
-                                                false , false, false, false, false, false, false, false, // 2
-                                                false , false, false, false, false, false, false, false } ; // 1
+    public static final boolean[] COLUMN_G = { false  , false, false, false, false, false, true, false , // 8
+                                                false , false, false, false, false, false, true, false, // 7
+                                                false , false, false, false, false, false, true, false, // 6
+                                                false , false, false, false, false, false, true, false, // 5
+                                                false , false, false, false, false, false, true, false, // 4
+                                                false , false, false, false, false, false, true, false, // 3
+                                                false , false, false, false, false, false, true, false, // 2
+                                                false , false, false, false, false, false, true, false } ; // 1
 
     // Static method for confirming if a given location int is within the 0-63 board range
     static boolean isValidBoardLocation(final int location) {
