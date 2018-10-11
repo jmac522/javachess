@@ -31,17 +31,17 @@ public class Knight extends Piece{
             currentPotentialMove = this.locationOnBoard + potentialMoveOffset;
 
             // If the currentPotentialMove is within the valid range of the 0-63 board, and the offset does not fail
-            // any of the Row and Column Edge case exceptions
+            // any of the Column Edge case exceptions
             if (GameUtilities.isValidBoardLocation(currentPotentialMove)       &&
                (!isFirstColumnException(locationOnBoard, potentialMoveOffset)) &&
                (!isLastColumnException(locationOnBoard, potentialMoveOffset))  &&
-               (!isRowOneException(locationOnBoard, potentialMoveOffset))      &&
-               (!isRowEightException(locationOnBoard, potentialMoveOffset))){
+               (!isColumnBException(locationOnBoard, potentialMoveOffset))      &&
+               (!isColumnGException(locationOnBoard, potentialMoveOffset))){
                 // get the BoardSquare that is at the current potential move location
                 final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
 
                 if (!potentialMoveSquare.isOccupied()) {
-                    legalMoves.add(new Move());
+                    legalMoves.add(new Move()); // stubbed move object, expand later
                 } else {
                     // if the potential square IS occupied, get the piece that is currently on that square and its
                     // color
@@ -52,7 +52,7 @@ public class Knight extends Piece{
                     // If the piece on the potential move square is not the same color as the knight, add this
                     // square as a potential legal move
                     if (this.color != pieceColor) {
-                        legalMoves.add(new Move());
+                        legalMoves.add(new Move()); // stubbed move object, expand later
                     }
                 }
             }
@@ -80,19 +80,17 @@ public class Knight extends Piece{
                 || (potentialMoveOffset == 10) || (potentialMoveOffset == 17));
     }
 
-    // Method to handle edge case for determining illegal moves when the knight is on row 1(bottom most) of the
+    // Method to handle edge case for determining illegal moves when the knight is on colun B (second from left) of the
     // board
-    private static boolean isRowOneException(final int currentLocation, final int potentialMoveOffset) {
-        // If the knight is in the first row, it cannot make any of the moves that move downwards
-        return GameUtilities.ROW_ONE[currentLocation] && ((potentialMoveOffset == 6) || (potentialMoveOffset == 10)
-                || (potentialMoveOffset == 15) || (potentialMoveOffset == 17));
+    private static boolean isColumnBException(final int currentLocation, final int potentialMoveOffset) {
+        // If the knight is in the second columns, it cannot make any of the moves that move two columns to the left
+        return GameUtilities.COLUMN_B[currentLocation] && ((potentialMoveOffset == 6) || (potentialMoveOffset == -10)));
     }
 
-    // Method to handle edge case for determining illegal moves when the knight is on row 8(upper most) of the
+    // Method to handle edge case for determining illegal moves when the knight is on column G (second from right) of the
     // board
-    private static boolean isRowEightException(final int currentLocation, final int potentialMoveOffset) {
-        // If the knight is in the eighth row, it cannot make any of the moves that move upwards
-        return GameUtilities.ROW_EIGHT[currentLocation] && ((potentialMoveOffset == -6) || (potentialMoveOffset == -10)
-                || (potentialMoveOffset == -15) || (potentialMoveOffset == -17));
+    private static boolean isColumnGException(final int currentLocation, final int potentialMoveOffset) {
+        // If the knight is in the Seventh columns, it cannot make any of the moves that move two columns to the right
+        return GameUtilities.COLUMN_G[currentLocation] && ((potentialMoveOffset == -6) || (potentialMoveOffset == 10));
     }
 }

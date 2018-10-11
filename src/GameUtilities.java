@@ -19,14 +19,14 @@ public class GameUtilities {
                                                false , false, false, false, false, false, false, true, // 2
                                                false , false, false, false, false, false, false, true } ; // 1
 
-    public static final boolean[] COLUMN_B = { false , false, false, false, false, false, false, false, // 8
-                                              false , false, false, false, false, false, false, false, // 7
-                                              false , false, false, false, false, false, false, false, // 6
-                                              false , false, false, false, false, false, false, false, // 5
-                                              false , false, false, false, false, false, false, false, // 4
-                                              false , false, false, false, false, false, false, false, // 3
-                                              false , false, false, false, false, false, false, false, // 2
-                                              false  , false, false, false, false, false, false, false } ; // 1
+    public static final boolean[] COLUMN_B = { false , true, false, false, false, false, false, false, // 8
+                                              false , true, false, false, false, false, false, false, // 7
+                                              false , true, false, false, false, false, false, false, // 6
+                                              false , true, false, false, false, false, false, false, // 5
+                                              false , true, false, false, false, false, false, false, // 4
+                                              false , true, false, false, false, false, false, false, // 3
+                                              false , true, false, false, false, false, false, false, // 2
+                                              false  , true, false, false, false, false, false, false } ; // 1
 
     public static final boolean[] COLUMN_G = { false  , false, false, false, false, false, true, false , // 8
                                                 false , false, false, false, false, false, true, false, // 7
