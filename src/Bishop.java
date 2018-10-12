@@ -2,6 +2,7 @@
 
 
 // Import List/ArrayList for keeping track of legal moves
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -28,13 +29,16 @@ public class Bishop extends Piece{
         	int currentPotentialMove = this.locationOnBoard;
         	// while the current potential move is a Valid Board location increment by the vector
         	while (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
+        		// Check for edge cases, break if needed
+        		if (isColumnHException(currentPotentialMove, directionalVectorOffset) ||
+					isColumnAException(currentPotentialMove, directionalVectorOffset)) {
+        			break;
+				}
+				// increment current move by vector offset
         		currentPotentialMove += directionalVectorOffset;
-        		// if the new position is a valid move and does not fail any edge case exceptions
-        		// add appropriate move to legal moves list 
-        		if (GameUtilities.isValidBoardLocation(currentPotentialMove) &&
-        		       !isColumnHException(currentPotentialMove, directionalVectorOffset) &&
-        		       !isColumnAException(currentPotetnailMove, directionalVectorOffset)) {
-        		     // get the boardsquare object of the current potential move
+        		// if the new position is a valid position continue
+        		if (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
+        		     // get the board square object of the current potential move
         			final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
         			
         			if (!potentialMoveSquare.isOccupied()) {
@@ -47,7 +51,7 @@ public class Bishop extends Piece{
         				if (this.color != pieceColor) {
         					// if it is an opponents piece, it can be captured
         					// but there will be no further potential moves down this vector 
-	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSqaure));
+	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSquare));
 	                        break;
         				} else {
         					// This is not a legal move and there are no further potential moves
@@ -65,16 +69,15 @@ public class Bishop extends Piece{
     // exception for Column A edge cases
 	private static boolean isColumnAException(final int currentLocation, final int currentOffset ) {
 		// if bishop is in column A it cannot move to the left
-		return GameUtilities.COLUMN_A(currentLocation) && (currentOffset == 7 || currentOffset == -9);
+		return GameUtilities.COLUMN_A[currentLocation] && (currentOffset == 7 || currentOffset == -9);
 	}
 	
 	// exception for Column B edge cases 
 	private static boolean isColumnHException(final int currentLocation, final int currentOffset ) {
-		// if bishop is in Column B it cannot move to the right 
-		return GameUtilities.COLUMN_H(currentLocation) && (currentOffset == -7 || currentOffset == 9);
+		// if bishop is in Column H it cannot move to the right
+		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == -7 || currentOffset == 9);
 	}
 }
 
-// Write general method for checking and adding moves in all four directions
-// Something like private void getDirectionMoves(List legalMoves, int positionTracker, int incramentValue, char edgeColumn)
+
 

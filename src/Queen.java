@@ -1,4 +1,5 @@
 // Import List/ArrayList for keeping track of legal moves
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -26,12 +27,16 @@ public class Queen extends Piece {
         	int currentPotentialMove = this.locationOnBoard;
         	// while the current potential move is a Valid Board location increment by the vector
         	while (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
-        		currentPotentialMove += directionalVectorOffset;
-        		// if the new position is a valid move and does not fail any edge case exceptions
-        		// add appropriate move to legal moves list 
-        		if (GameUtilities.isValidBoardLocation(currentPotentialMove) &&
-        		       !isColumnHException(currentPotentialMove, directionalVectorOffset) &&
-        		       !isColumnAException(currentPotetnailMove, directionalVectorOffset)) {
+				// Check for edge cases, break if needed
+				if (isColumnHException(currentPotentialMove, directionalVectorOffset) ||
+						isColumnAException(currentPotentialMove, directionalVectorOffset)) {
+					break;
+				}
+				// increment by directional vector
+				currentPotentialMove += directionalVectorOffset;
+
+				// if the new position is a valid move continue
+        		if (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
         		     // get the boardsquare object of the current potential move
         			final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
         			
@@ -45,7 +50,7 @@ public class Queen extends Piece {
         				if (this.color != pieceColor) {
         					// if it is an opponents piece, it can be captured
         					// but there will be no further potential moves down this vector 
-	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSqaure));
+	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSquare));
 	                        break; // break from while loop
         				} else {
         					// This is not a legal move and there are no further potential moves
@@ -64,7 +69,7 @@ public class Queen extends Piece {
 	// Edge cases for Queen in Columns A and H
     private static boolean isColumnAException(final int currentLocation, final int currentOffset ) {
 		// if Queen is in column A it cannot move to the left, up left, or down left
-		return GameUtilities.COLUMN_A(currentLocation) && (currentOffset == -1 || 
+		return GameUtilities.COLUMN_A[currentLocation] && (currentOffset == -1 ||
 		                              					   currentOffset == -9 ||
 		                              					   currentOffset == 7);
 	}
@@ -72,7 +77,7 @@ public class Queen extends Piece {
 	// exception for Column H edge cases 
 	private static boolean isColumnHException(final int currentLocation, final int currentOffset ) {
 		// if queen is in Column H it cannot move to the right, up right, down right
-		return GameUtilities.COLUMN_H(currentLocation) && (currentOffset == 1  ||
+		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == 1  ||
 		 												   currentOffset == -7 ||
 		 												   currentOffset == 9);
 	}

@@ -10,7 +10,10 @@
 *                                                                                                       */
 
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 public abstract class Piece {
     // Properties containing the piece's position on the board and which side (W or B) it is on

@@ -2,6 +2,7 @@
 
 
 // Import List/ArrayList for keeping track of legal moves
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class Knight extends Piece{
                     // If the piece on the potential move square is not the same color as the knight, add this
                     // square as a potential legal move
                     if (this.color != pieceColor) {
-                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSqaure));
+                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSquare));
                     }
                 }
             }
@@ -84,7 +85,7 @@ public class Knight extends Piece{
     // board
     private static boolean isColumnBException(final int currentLocation, final int potentialMoveOffset) {
         // If the knight is in the second columns, it cannot make any of the moves that move two columns to the left
-        return GameUtilities.COLUMN_B[currentLocation] && ((potentialMoveOffset == 6) || (potentialMoveOffset == -10)));
+        return GameUtilities.COLUMN_B[currentLocation] && ((potentialMoveOffset == 6) || (potentialMoveOffset == -10));
     }
 
     // Method to handle edge case for determining illegal moves when the knight is on column G (second from right) of the
