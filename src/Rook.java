@@ -15,13 +15,11 @@ public class Rook extends Piece {
     
     @Override
     public Collection<Move> getLegalMoves(Board board) {
- 
-        
         // ArrayList to hold found legal moves among potential bishop moves
         final List<Move> legalMoves = new ArrayList<>();
         
         // go through each of the 4 vectors to evaluate legal moves 
-        for (int directionalVectorOffset : DIRECTIONAL_VECTORS) {
+        for (final int directionalVectorOffset : DIRECTIONAL_VECTORS) {
         	// set current move to pieces position 
         	int currentPotentialMove = this.locationOnBoard;
         	// while the current potential move is a Valid Board location increment by the vector
