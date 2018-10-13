@@ -19,17 +19,21 @@ public abstract class Piece {
     // Properties containing the piece's position on the board and which side (W or B) it is on
     protected final int locationOnBoard;
     protected final Side color;
+    // boolean to keep track of if piece has been moved yet ( especially important for pawns, rooks, and kings )
+    protected boolean hasMoved;
 
     // Constructor
     Piece(final int pieceLocation, final Side color) {
         this.locationOnBoard = pieceLocation;
         this.color = color;
+        this.hasMoved = false;
     }
 
-    //getter
+    //getters
     public Side getColor() {
         return this.color;
     }
+    public boolean hasMoved() { return this.hasMoved; }
 
     // Abstract method for returning a list of legal moves. Will be overridden for specific Piece subclasses
     public abstract Collection<Move> getLegalMoves(final Board board);
