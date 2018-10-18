@@ -6,7 +6,7 @@
 *   - An enum PieceType for checking the pieces type (ex. useful for finding a king)
 * Piece contains methods for:
 *   = Calculating all legal moves for a given piece
-*   = Moving a piece based on a passed move object (Generates new piece. Consider building cache for
+*   = Moving a piece based on a passed move object (Generates new piece. TODO: Consider building cache for
 *   all possible piece locations )
 *
 *                                                                                                       */
@@ -69,7 +69,8 @@ public abstract class Piece {
 	// retains all properties of current Piece but with updated location on board
 	public abstract Piece movePiece(Move move);
 	
-    // enum for piece types for use in toString Methods
+    // enum for piece types for use in toString Methods and checking piece type
+    // when needed
     public enum PieceType {
 
         PAWN("P") {
@@ -108,18 +109,23 @@ public abstract class Piece {
                 return true;
             }
         };
-
+		
+		// Memberfield to hold a string representation for a given piece type
         private String pieceName;
-
+		
+		// Constructor 
         PieceType(final String pieceName) {
             this.pieceName = pieceName;
         }
-
+		
+		// toString method for printing a string representation in a piece
+		// used when printing out a board. 
         @Override
         public String toString() {
             return this.pieceName;
         }
-
+		
+		// Abstract method used in checking if a Piece is a king 
         public abstract boolean isKing();
     }
 }

@@ -51,8 +51,12 @@ public enum Side  {
 
     // Method for getting movement direction based on side (Black is moving in Positive direction, White in Negative)
     public abstract int getMovementDirection();
+    
+    // Methods for determining if a given Side enum is white or black
     public abstract boolean isWhite();
     public abstract boolean isBlack();
+    
+    // Method used for returning a player based on a pieces Side affiliation
     public abstract Player choosePlayer(Player whitePlayer, Player blackPlayer);
     }
 }
