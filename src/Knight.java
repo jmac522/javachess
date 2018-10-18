@@ -39,7 +39,7 @@ public class Knight extends Piece{
                (!isColumnBException(locationOnBoard, potentialMoveOffset))      &&
                (!isColumnGException(locationOnBoard, potentialMoveOffset))){
                 // get the BoardSquare that is at the current potential move location
-                final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+                final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
 
                 if (!potentialMoveSquare.isOccupied()) {
                     legalMoves.add(new PassiveMove(board, this, currentPotentialMove)); // stubbed move object, expand later
@@ -93,5 +93,10 @@ public class Knight extends Piece{
     private static boolean isColumnGException(final int currentLocation, final int potentialMoveOffset) {
         // If the knight is in the Seventh columns, it cannot make any of the moves that move two columns to the right
         return GameUtilities.COLUMN_G[currentLocation] && ((potentialMoveOffset == -6) || (potentialMoveOffset == 10));
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.KNIGHT.toString();
     }
 }

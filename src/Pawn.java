@@ -82,5 +82,10 @@ public class Pawn extends Piece {
         // return unmodifiable list of pawn's legal moves 
         return Collections.unmodifiableList(legalMoves);
     }
+
+    @Override
+    public String toString() {
+        return PieceType.PAWN.toString();
+    }
 }
 

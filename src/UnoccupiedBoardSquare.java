@@ -26,4 +26,9 @@ public class UnoccupiedBoardSquare extends BoardSquare {
         // will return null as it is UnnocupiedBoardSquare
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "-";
+    }
 }

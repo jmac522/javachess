@@ -33,7 +33,7 @@ public class Rook extends Piece {
         		// if the new position is a valid move continue
         		if (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
         		     // get the boardsquare object of the current potential move
-        			final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+        			final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
         			
         			if (!potentialMoveSquare.isOccupied()) {
         				// if the square is not occupied, add it to the legal moves
@@ -71,5 +71,10 @@ public class Rook extends Piece {
 	private static boolean isColumnHException(final int currentLocation, final int currentOffset ) {
 		// if rook is in Column H it cannot move to the right 
 		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == 1);
+	}
+
+	@Override
+	public String toString() {
+		return PieceType.ROOK.toString();
 	}
 }

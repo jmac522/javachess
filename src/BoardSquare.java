@@ -67,4 +67,6 @@ public abstract class BoardSquare {
     // Method for returning the piece contained by a square. Will return either a piece
     // object or null (if square is unoccupied)
     public abstract Piece getPiece();
+
+
 }

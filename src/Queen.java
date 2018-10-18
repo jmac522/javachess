@@ -38,7 +38,7 @@ public class Queen extends Piece {
 				// if the new position is a valid move continue
         		if (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
         		     // get the boardsquare object of the current potential move
-        			final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+        			final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
         			
         			if (!potentialMoveSquare.isOccupied()) {
         				// if the square is not occupied, add it to the legal moves
@@ -80,6 +80,11 @@ public class Queen extends Piece {
 		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == 1  ||
 		 												   currentOffset == -7 ||
 		 												   currentOffset == 9);
+	}
+
+	@Override
+	public String toString() {
+		return PieceType.QUEEN.toString();
 	}
 }
 

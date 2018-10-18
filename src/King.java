@@ -39,7 +39,7 @@ public class King extends Piece{
                 }
 
                 // get the BoardSquare object for the potential move
-                final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+                final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
 
                 if(!potentialMoveSquare.isOccupied()) {
                     // if the square is not occupied, add to legal moves
@@ -76,5 +76,10 @@ public class King extends Piece{
         // If the king is in the last column, it cannot make any of the moves that move it to the right
         return GameUtilities.COLUMN_H[currentLocation] && ((potentialMoveOffset == -7) || (potentialMoveOffset == 1)
                 || (potentialMoveOffset == 9));
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.KING.toString();
     }
 }

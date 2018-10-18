@@ -26,4 +26,10 @@ public class OccupiedBoardSquare extends BoardSquare {
         // will return the piece contained on the square
         return this.currentPiece;
     }
+
+    @Override
+    public String toString() {
+        return this.currentPiece.getColor().isBlack() ? this.getPiece().toString().toLowerCase() :
+                this.currentPiece.toString();
+    }
 }

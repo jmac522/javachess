@@ -26,7 +26,7 @@ public class Bishop extends Piece{
         // go through each of the 4 vectors to evaluate legal moves 
         for (int directionalVectorOffset : DIRECTIONAL_VECTORS) {
         	// set current move to pieces position 
-        	int currentPotentialMove = this.locationOnBoard;
+        	int currentPotentialMove = this.getLocationOnBoard();
         	// while the current potential move is a Valid Board location increment by the vector
         	while (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
         		// Check for edge cases, break if needed
@@ -39,7 +39,7 @@ public class Bishop extends Piece{
         		// if the new position is a valid position continue
         		if (GameUtilities.isValidBoardLocation(currentPotentialMove)) {
         		     // get the board square object of the current potential move
-        			final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+        			final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
         			
         			if (!potentialMoveSquare.isOccupied()) {
         				// if the square is not occupied, add it to the legal moves
@@ -48,7 +48,7 @@ public class Bishop extends Piece{
         				// if the square is occupied get the piece occupying the square and its side
         				final Piece pieceOnSquare = potentialMoveSquare.getPiece();
         				final Side pieceColor = pieceOnSquare.getColor();
-        				if (this.color != pieceColor) {
+        				if (this.getColor() != pieceColor) {
         					// if it is an opponents piece, it can be captured
         					// but there will be no further potential moves down this vector 
 	                        legalMoves.add(new CaptureMove(board, this, currentPotentialMove, pieceOnSquare));
@@ -76,6 +76,11 @@ public class Bishop extends Piece{
 	private static boolean isColumnHException(final int currentLocation, final int currentOffset ) {
 		// if bishop is in Column H it cannot move to the right
 		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == -7 || currentOffset == 9);
+	}
+
+	@Override
+	public String toString() {
+    	return PieceType.BISHOP.toString();
 	}
 }
 
