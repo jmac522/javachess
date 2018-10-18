@@ -77,7 +77,9 @@ public class King extends Piece{
         return GameUtilities.COLUMN_H[currentLocation] && ((potentialMoveOffset == -7) || (potentialMoveOffset == 1)
                 || (potentialMoveOffset == 9));
     }
-
+	
+	
+	// Overridden toString method for King using PieceType enum
     @Override
     public String toString() {
         return PieceType.KING.toString();
