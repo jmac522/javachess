@@ -2,10 +2,12 @@
 *  Piece is an abstract class that will extend to classes for specific piece types. The piece holds:
 *   - The location of the piece on the board ( int between 0-63 )
 *   - The side (white or black) the piece is on
-*
-*  Piece contains methods for:
+*	- Whether the piece has moved (useful for castling, en passant, and AI opening moves)
+*   - An enum PieceType for checking the pieces type (ex. useful for finding a king)
+* Piece contains methods for:
 *   = Calculating all legal moves for a given piece
-*   =
+*   = Moving a piece based on a passed move object (Generates new piece. Consider building cache for
+*   all possible piece locations )
 *
 *                                                                                                       */
 
@@ -63,6 +65,8 @@ public abstract class Piece {
     // Abstract method for returning a list of legal moves. Will be overridden for specific Piece subclasses
     public abstract Collection<Move> getLegalMoves(final Board board);
 	
+	// Abstract method for moving a piece based on a passed move object. Generate a piece that
+	// retains all properties of current Piece but with updated location on board
 	public abstract Piece movePiece(Move move);
 	
     // enum for piece types for use in toString Methods
