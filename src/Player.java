@@ -6,6 +6,7 @@ public abstract class Player {
     protected final Board board;
     protected final King playersKing;
     protected final Collection<Move> legalMoves;
+    private final isInCheck;
 	
 	
 	// Super Constrcutor for Player objects
@@ -15,6 +16,20 @@ public abstract class Player {
         this.board = board;
         this.playersKing = initKing();
         this.legalMoves = legalMoves;
+        // Determines if player is in checking using find Attacks on Tile
+        this.isInCheck = !Player.findAttacksOnTile(this.playersKing.getLocationOnBoard(), opponentMoves).isEmpty();
+    }
+    
+    //Method that takes a piece's location and checks opponents legal moves to see
+    // which moves attack that location
+    private static Collection<Move> findAttacksOnTile(final int pieceLocation, final Collection<Move> moves) {
+    	final List<Moves> attackingMoves = new ArrayList<>();
+    	for (Move move : moves) {
+    		if (pieceLocation == move.getMovingTo()) {
+    			attackingMoves.add(move);
+    		}
+    	}
+    	return Collections.unmodifiableList(attackingMoves);
     }
 	
 	// Get the king for this player
@@ -38,17 +53,28 @@ public abstract class Player {
 	
 	// Method for checking if the player is in check
     public boolean isInCheck() {
-        return false;
+        return this.isInCheck;
     }
 	
 	// Method for checking if a player has been mated
     public boolean isMated() {
-        return false;
+    	// if the king is in check and has no legal escape moves, it is checkmate
+        return this.isInCheck && !hasEscapeMoves();
+    }
+    
+    protected boolean hasEscapeMoves() {
+    	for(final Move move : this.legalMoves) {
+    		final MoveExecution execution = makeMove(move);
+    		if (execution.getMoveStatus.isDone()) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 	
 	// Method for checking if the game is at a stalemate
     public boolean isStaleMated() {
-        return false;
+        return !this.isInCheck && !hasEscapeMoves();
     }
 	
 	// Method to determine if a player has castled yet
@@ -60,7 +86,39 @@ public abstract class Player {
 	// method for executing a given move and generating the new gameboard
 	// based on the move
     public MoveExecution makeMove(final Move move) {
-        return null;
+    	// If the move is not legal, return existing board unchanged, set status to ILLEGAL
+    	if(!isMoveLegal()) {
+    		return new MoveExecution(this.board, move, MoveStatus.ILLEGAL_MOVE)
+    	}
+    	
+    	// If it is a potential legal move, create a new board representing 
+    	// the new state if the move is executed
+    	final Board updatedBoard = move.execute();
+    	
+    	// Create a collection of opponents legal moves that could attack the current player's
+    	// King on the updatedBoard
+    	final Collection<Move> kingAttacks = Player.findAttacksOnTile(updatedBoard.getCurrentPlayer().getOpponent().getPlayerKing().getLocationOnBoard,
+    	updatedBoard.getCurrentPlayer().getLegalMoves());
+    	
+    	if(!kingAttacks.isEmpty()) {
+    		// If the opponent is attacking the moving players king after executing the move
+    		// this is an illegal move as it would put the player in check so
+    		// the current board should remain unchanged and move status marked
+    		// appropriately 
+    		return new MoveExecution(this.board, move, MoveStatus.PLAYER_IN_CHECK);
+    	}
+    	
+    	// If the move is a legal movement for the piece, and does not leave the player in check
+    	// we can pass the updated board to represent the move being executed
+        return new MoveExecution(updatedBoard, move, MoveStatus.DONE);
+    }
+    
+    public King getPlayerKing() {
+    	return this.playersKing;
+    }
+    
+    public Collection<Move> getLegalMoves(){
+    	return this.legalMoves;
     }
 	
 	// Abstract methods to be overridden in player subclasses

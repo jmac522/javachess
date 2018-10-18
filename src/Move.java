@@ -11,4 +11,10 @@ public abstract class Move {
 		this.movingPiece = movingPiece;
 		this.movingTo = movingTo;
 	}
+	
+	public int getMovingTo {
+		return this.movingTo;
+	}
+	
+	public abstract Board execute();
 }

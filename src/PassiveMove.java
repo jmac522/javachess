@@ -8,4 +8,9 @@ public final class PassiveMove extends Move {
 	PassiveMove(final Board board, final Piece movingPiece, final int movingTo) {
 		super(board, movingPiece, movingTo);
 	}
+	
+	@Overrides
+	public Board execute() {
+		return null;
+	}
 }

@@ -13,4 +13,9 @@ public final class CaptureMove extends Move {
 		super(board, movingPiece, movingTo);
 		this.threatenedPiece = threatenedPiece;
 	}
+	
+	@Overrides
+	public Board exectue() {
+		return null;
+	}
 }

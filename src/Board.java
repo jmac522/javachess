@@ -12,6 +12,7 @@ public class Board {
     private final Collection<Piece> blackPieces;
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
+    private final Player currentPlayer;
 
     // constructor takes builder object in order to create a board instance
     private Board(Builder builder) {
@@ -28,6 +29,8 @@ public class Board {
 		// Assign the Players who are playing each respective side
         this.whitePlayer = new WhitePlayer(this, whiteInitialLegalMoves, blackInitialLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteInitialLegalMoves, blackInitialLegalMoves);
+        
+        this.currentPlayer = builder.sideToMove.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 	
 	// Board's toString method to print a visualization of the board to the console
@@ -60,6 +63,10 @@ public class Board {
 
     public Collection<Piece> getWhitePieces() {
         return whitePieces;
+    }
+    
+    public Player getCurrentPlayer() {
+    	return this.currentPlayer();
     }
 	
 	// Method for returning all of a given sides legal moves by calling each
