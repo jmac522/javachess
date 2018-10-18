@@ -21,12 +21,14 @@ public abstract class Piece {
     protected final Side color;
     // boolean to keep track of if piece has been moved yet ( especially important for pawns, rooks, and kings )
     protected boolean hasMoved;
+    protected final PieceType pieceType;
 
     // Constructor
-    Piece(final int pieceLocation, final Side color) {
+    Piece(final int pieceLocation, final Side color, final PieceType pieceType) {
         this.locationOnBoard = pieceLocation;
         this.color = color;
         this.hasMoved = false;
+        this.pieceType = pieceType;
     }
 
     //getters
@@ -35,6 +37,7 @@ public abstract class Piece {
     }
     public boolean hasMoved() { return this.hasMoved; }
     public int getLocationOnBoard() { return this.locationOnBoard; }
+    public PieceType getPieceType() { return this.pieceType; }
 
     // Abstract method for returning a list of legal moves. Will be overridden for specific Piece subclasses
     public abstract Collection<Move> getLegalMoves(final Board board);
@@ -42,12 +45,42 @@ public abstract class Piece {
     // enum for piece types for use in toString Methods
     public enum PieceType {
 
-        PAWN("P"),
-        KNIGHT("N"),
-        BISHOP("B"),
-        ROOK("R"),
-        QUEEN("Q"),
-        KING("K");
+        PAWN("P") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KNIGHT("N"){
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        BISHOP("B"){
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        ROOK("R"){
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        QUEEN("Q"){
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KING("K"){
+            @Override
+            public boolean isKing() {
+                return true;
+            }
+        };
 
         private String pieceName;
 
@@ -59,5 +92,7 @@ public abstract class Piece {
         public String toString() {
             return this.pieceName;
         }
+
+        public abstract boolean isKing();
     }
 }

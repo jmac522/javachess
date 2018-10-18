@@ -11,7 +11,7 @@ public class Pawn extends Piece {
 
 
     Pawn(final int pieceLocation, final Side color) {
-        super(pieceLocation, color);
+        super(pieceLocation, color, PieceType.PAWN);
     }
 
     @Override

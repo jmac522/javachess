@@ -11,7 +11,7 @@ public class Queen extends Piece {
     
     // Constructor for Queen, inherits from Piece super
     Queen(final int pieceLocation, final Side color) {
-        super(pieceLocation, color);
+        super(pieceLocation, color, PieceType.QUEEN);
     }
 	
 	@Override

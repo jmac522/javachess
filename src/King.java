@@ -19,7 +19,7 @@ public class King extends Piece{
     private static final int[] POSSIBLE_MOVES  = {-8, 8, -1, 1, -9, 9, -7, 7};
 
     King(final int pieceLocation, final Side color) {
-        super(pieceLocation, color);
+        super(pieceLocation, color, PieceType.KING);
     }
 
     @Override

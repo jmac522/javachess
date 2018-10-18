@@ -6,6 +6,9 @@ public class Board {
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
 
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
+
     // constructor takes builder object in order to create a board instance
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -14,6 +17,9 @@ public class Board {
 
         final Collection<Move> whiteInitialLegalMoves = findLegalMoves(this.whitePieces);
         final Collection<Move> blackInitialLegalMoves = findLegalMoves(this.blackPieces);
+
+        this.whitePlayer = new WhitePlayer(this, whiteInitialLegalMoves, blackInitialLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteInitialLegalMoves, blackInitialLegalMoves);
     }
 
     @Override
@@ -29,6 +35,13 @@ public class Board {
         return builder.toString();
     }
 
+    public Collection<Piece> getBlackPieces() {
+        return blackPieces;
+    }
+
+    public Collection<Piece> getWhitePieces() {
+        return whitePieces;
+    }
 
     private Collection<Move> findLegalMoves(final Collection<Piece> pieceList) {
         final List<Move> legalMoves = new ArrayList<>();

@@ -15,7 +15,7 @@ public class Knight extends Piece{
 
     // Constructor for Knight, inherits from Piece super
     Knight(final int pieceLocation, final Side color) {
-        super(pieceLocation, color);
+        super(pieceLocation, color, PieceType.KNIGHT);
     }
 
     @Override

@@ -10,7 +10,7 @@ public class Rook extends Piece {
     
     // Constructor for Rook, inherits from Piece super
     Rook(final int pieceLocation, final Side color) {
-        super(pieceLocation, color);
+        super(pieceLocation, color, PieceType.ROOK);
     }
     
     @Override

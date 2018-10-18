@@ -13,8 +13,8 @@ public class Bishop extends Piece{
     
     // Constructor for Bishop, inherits from Piece super
     Bishop(final int pieceLocation, final Side color) {
-        super(pieceLocation, color);
-    }
+		super(pieceLocation, color, PieceType.BISHOP);
+	}
 
     @Override
     public Collection<Move> getLegalMoves(Board board) {
