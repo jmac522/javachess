@@ -94,6 +94,11 @@ public class Knight extends Piece{
         // If the knight is in the Seventh columns, it cannot make any of the moves that move two columns to the right
         return GameUtilities.COLUMN_G[currentLocation] && ((potentialMoveOffset == -6) || (potentialMoveOffset == 10));
     }
+    
+	@Override
+	public Knight movePiece(Move move) {
+		return new Knight(move.getMovingTo, move.getMovingPiece.getColor());
+	}
 
     @Override
     public String toString() {

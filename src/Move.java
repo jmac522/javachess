@@ -16,5 +16,9 @@ public abstract class Move {
 		return this.movingTo;
 	}
 	
+	public Piece getMovingPiece() {
+		return this.movingPiece;
+	}
+	
 	public abstract Board execute();
 }

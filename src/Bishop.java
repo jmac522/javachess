@@ -77,6 +77,11 @@ public class Bishop extends Piece{
 		// if bishop is in Column H it cannot move to the right
 		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == -7 || currentOffset == 9);
 	}
+	
+	@Override
+	public Bishop movePiece(Move move) {
+		return new Bishop(move.getMovingTo, move.getMovingPiece.getColor());
+	}
 
 	@Override
 	public String toString() {

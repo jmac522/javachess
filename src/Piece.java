@@ -30,6 +30,27 @@ public abstract class Piece {
         this.hasMoved = false;
         this.pieceType = pieceType;
     }
+    
+    @Override public boolean equals(final Object other) {
+    	if (this == other) {
+    		return true;
+    	}
+    	
+    	if (!(other instanceof Piece) {
+    		return false;
+    	}
+    	
+    	final Piece otherPiece = (Piece) other;
+    	return (this.locationOnBoard == other.getLocationOnBoard &&
+    		this.pieceType == other.getPieceType &&
+    		this.color == other.getColor() &&
+    		this.hasMoved == other.getHasMoved()) 
+    }
+    
+    @Override public int hashCode() {
+    	// TODO: Implament hash code
+    	return null;
+    }
 
     //getters
     public Side getColor() {
@@ -41,7 +62,9 @@ public abstract class Piece {
 
     // Abstract method for returning a list of legal moves. Will be overridden for specific Piece subclasses
     public abstract Collection<Move> getLegalMoves(final Board board);
-
+	
+	public abstract Piece movePiece(Move move);
+	
     // enum for piece types for use in toString Methods
     public enum PieceType {
 

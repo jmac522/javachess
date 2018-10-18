@@ -72,6 +72,11 @@ public class Rook extends Piece {
 		// if rook is in Column H it cannot move to the right 
 		return GameUtilities.COLUMN_H[currentLocation] && (currentOffset == 1);
 	}
+	
+	@Override
+	public Rook movePiece(Move move) {
+		return new Rook(move.getMovingTo, move.getMovingPiece.getColor());
+	}
 
 	@Override
 	public String toString() {

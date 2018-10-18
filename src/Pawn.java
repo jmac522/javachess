@@ -82,6 +82,11 @@ public class Pawn extends Piece {
         // return unmodifiable list of pawn's legal moves 
         return Collections.unmodifiableList(legalMoves);
     }
+    
+	@Override
+	public Pawn movePiece(Move move) {
+		return new Pawn(move.getMovingTo, move.getMovingPiece.getColor());
+	}
 
     @Override
     public String toString() {
