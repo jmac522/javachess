@@ -35,6 +35,14 @@ public class Board {
         return builder.toString();
     }
 
+    public Player whitePlayer() {
+        return this.whitePlayer;
+    }
+
+    public Player blackPlayer() {
+        return this.blackPlayer;
+    }
+
     public Collection<Piece> getBlackPieces() {
         return blackPieces;
     }

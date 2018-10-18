@@ -23,5 +23,31 @@ public abstract class Player {
         throw new RuntimeException("No King on board, invalid game.");
     }
 
+    public boolean isMoveLegal(final Move move) {
+        return this.legalMoves.contains(move);
+    }
+
+    public boolean isInCheck() {
+        return false;
+    }
+
+    public boolean isMated() {
+        return false;
+    }
+
+    public boolean isStaleMated() {
+        return false;
+    }
+
+    public boolean hasCastled() {
+        return false;
+    }
+
+    public MoveExecution makeMove(final Move move) {
+        return null;
+    }
+
     public abstract Collection<Piece> getActivePieces();
+    public abstract Side getSide();
+    public abstract Player getOpponent();
 }
