@@ -1,27 +1,37 @@
 import java.util.*;
 
 public class Board {
-
+	// Member fields holding
+	// - The current game board
+	// - All of the white pieces in play 
+	// - All of the black pieces in play
+	// - The player playing white
+	// - the player playing black
     private final List<BoardSquare> gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
-
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
 
     // constructor takes builder object in order to create a board instance
     private Board(Builder builder) {
+    	// Create a gameboard using the builder
         this.gameBoard = createGameBoard(builder);
+        // Get all active white and black pieces
         this.whitePieces = findActivePieces(this.gameBoard, Side.WHITE);
         this.blackPieces = findActivePieces(this.gameBoard, Side.BLACK);
-
+	
+		// Get all the legal moves for both white and black
         final Collection<Move> whiteInitialLegalMoves = findLegalMoves(this.whitePieces);
         final Collection<Move> blackInitialLegalMoves = findLegalMoves(this.blackPieces);
-
+		
+		// Assign the Players who are playing each respective side
         this.whitePlayer = new WhitePlayer(this, whiteInitialLegalMoves, blackInitialLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteInitialLegalMoves, blackInitialLegalMoves);
     }
-
+	
+	// Board's toString method to print a visualization of the board to the console
+	// for testing 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -34,7 +44,8 @@ public class Board {
         }
         return builder.toString();
     }
-
+	
+	// Getters
     public Player whitePlayer() {
         return this.whitePlayer;
     }
@@ -50,17 +61,21 @@ public class Board {
     public Collection<Piece> getWhitePieces() {
         return whitePieces;
     }
-
+	
+	// Method for returning all of a given sides legal moves by calling each
+	// of its individual active pieces' legalMoves method
     private Collection<Move> findLegalMoves(final Collection<Piece> pieceList) {
         final List<Move> legalMoves = new ArrayList<>();
-
+		
+		// Get the legal moves from each individual piece
         for (final Piece piece : pieceList) {
             legalMoves.addAll(piece.getLegalMoves(this));
         }
 
         return Collections.unmodifiableList(legalMoves);
     }
-
+	
+	// Method to find all of the active pieces of a given side
     private static Collection<Piece> findActivePieces(List<BoardSquare> gameBoard, Side side) {
 
         final List<Piece> activePieces = new ArrayList<>();
@@ -76,7 +91,7 @@ public class Board {
         return Collections.unmodifiableList(activePieces);
     }
 
-
+	// Gets a boardsquare at a given location on the gameboard
     public BoardSquare getBoardSquare(final int location) {
         return this.gameBoard.get(location);
     }
@@ -94,11 +109,13 @@ public class Board {
 
         return Collections.unmodifiableList(squares);
     }
-
+	
+	// Method for creating the initial state of a board for a new game
     public static Board createInitialPosition() {
         final Builder builder = new Builder();
 
-        // Set up the black pieces
+        // Set up the black pieces TODO:(Could chain these methods rather than invoking
+        // builder each time. Maybe ugly formatting?)
         builder.setPiece(new Rook(0, Side.BLACK)); // A8
         builder.setPiece(new Knight(1, Side.BLACK)); // B8
         builder.setPiece(new Bishop(2, Side.BLACK)); // C8
@@ -146,21 +163,25 @@ public class Board {
 
         Map<Integer, Piece> boardLayout;
         Side sideToMove;
-
+		// Initializes a hashmap to hold the boardLayout representation
         public Builder() {
             this.boardLayout = new HashMap<>();
         }
-
+		
+		// Adds a given piece to the board layout based on that piece's
+		// location on the board
         public Builder setPiece(final Piece piece) {
             this.boardLayout.put(piece.getLocationOnBoard(), piece);
             return this;
         }
-
+		
+		// Set which player's turn it is
         public Builder setSideToMove(final Side side) {
             this.sideToMove = side;
             return this;
         }
-
+		
+		// Creates the actually instance of the board object 
         public Board build() {
             return new Board(this);
         }
