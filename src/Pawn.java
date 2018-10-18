@@ -29,7 +29,7 @@ public class Pawn extends Piece {
             }
 
 
-            if (directionalVectorOffset == 8 && !board.getSquare(currentPotentialMove).isOccupied()) {
+            if (directionalVectorOffset == 8 && !board.getBoardSquare(currentPotentialMove).isOccupied()) {
                 // if you're moving forward and the tile is not occupied add legal move
                 // TODO: create pawn move class
                 legalMoves.add(new PassiveMove(board, this, currentPotentialMove));
@@ -41,7 +41,7 @@ public class Pawn extends Piece {
 
                 // get square directly in front of pawn
                 final int forwardSquare = this.locationOnBoard + (this.color.getMovementDirection() * 8);
-                if (!board.getSquare(forwardSquare).isOccupied() && !board.getSquare(currentPotentialMove).isOccupied()) {
+                if (!board.getBoardSquare(forwardSquare).isOccupied() && !board.getBoardSquare(currentPotentialMove).isOccupied()) {
                     // if the square directly in front of the pawn and two spaces ahead are unoccupied, double move is
                     // possible
                     legalMoves.add(new PassiveMove(board, this, currentPotentialMove));
@@ -51,7 +51,7 @@ public class Pawn extends Piece {
                       (GameUtilities.COLUMN_A[this.locationOnBoard] && this.color.isBlack()))) {
                 // if this is a diagonal vector of 7, pawn can only capture if square is occupied by piece of opposite color
                 // vector does not work for white pawns on H file and Black pawns on A file
-                final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+                final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
                 if(potentialMoveSquare.isOccupied()) {
                     // if the square is occupied, get the piece and its Side
                     final Piece pieceOnSquare = potentialMoveSquare.getPiece();
@@ -66,7 +66,7 @@ public class Pawn extends Piece {
                       (GameUtilities.COLUMN_A[this.locationOnBoard] && this.color.isWhite()))) {
                 // if this is a diagonal vector of 9, pawn can only capture if square is occupied by piece of opposite color
                 // vector does not work for Black pawns on H file and White pawns on A file
-                final BoardSquare potentialMoveSquare = board.getSquare(currentPotentialMove);
+                final BoardSquare potentialMoveSquare = board.getBoardSquare(currentPotentialMove);
                 if(potentialMoveSquare.isOccupied()) {
                     // if the square is occupied, get the piece and its Side
                     final Piece pieceOnSquare = potentialMoveSquare.getPiece();

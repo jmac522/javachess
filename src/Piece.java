@@ -17,10 +17,10 @@ import java.util.ArrayList;
 
 public abstract class Piece {
     // Properties containing the piece's position on the board and which side (W or B) it is on
-    protected final int locationOnBoard;
-    protected final Side color;
+    private final int locationOnBoard;
+    private final Side color;
     // boolean to keep track of if piece has been moved yet ( especially important for pawns, rooks, and kings )
-    protected boolean hasMoved;
+    private boolean hasMoved;
 
     // Constructor
     Piece(final int pieceLocation, final Side color) {
@@ -34,6 +34,7 @@ public abstract class Piece {
         return this.color;
     }
     public boolean hasMoved() { return this.hasMoved; }
+    public int getLocationOnBoard() { return this.locationOnBoard; }
 
     // Abstract method for returning a list of legal moves. Will be overridden for specific Piece subclasses
     public abstract Collection<Move> getLegalMoves(final Board board);
