@@ -79,7 +79,7 @@ public class Board {
             legalMoves.addAll(piece.getLegalMoves(this));
         }
 
-        return Collections.unmodifiableList(legalMoves);
+        return legalMoves;
     }
 	
 	// Method to find all of the active pieces of a given side

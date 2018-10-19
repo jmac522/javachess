@@ -74,6 +74,6 @@ public class WhitePlayer extends Player {
             }
         }
 
-        return Collections.unmodifiableList(kingCastles);
+        return kingCastles;
     }
 }

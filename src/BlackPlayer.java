@@ -77,6 +77,6 @@ public class BlackPlayer extends Player {
             }
         }
 
-        return Collections.unmodifiableList(kingCastles);
+        return kingCastles;
     }
 }

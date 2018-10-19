@@ -2,13 +2,13 @@
 
 public enum MoveStatus {
 	DONE {
-		@Overrides
+		@Override
 		public boolean isDone() {
 			return true;
 		}
 	},
 	ILLEGAL_MOVE{
-		@Overrides
+		@Override
 		public boolean isDone() {
 			return false;
 		}

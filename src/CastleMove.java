@@ -35,7 +35,7 @@ abstract class CastleMove extends Move {
             builder.setPiece(piece);
         }
         builder.setPiece(this.movingPiece.movePiece(this));
-        builder.setPiece(new Rook(this.castleRookEnd, this.castleRook.getColor()));
+        builder.setPiece(new Rook(this.castleRookEnd, this.castleRook.getColor(), false));
         builder.setSideToMove(this.board.getCurrentPlayer().getOpponent().getSide());
 
         return builder.build();

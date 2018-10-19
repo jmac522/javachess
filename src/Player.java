@@ -18,8 +18,11 @@ public abstract class Player {
            final Collection<Move> opponentMoves) {
         this.board = board;
         this.playersKing = initKing();
-        this.legalMoves = legalMoves;
-        this.legalMoves.addAll(calculateKingCastles(legalMoves, opponentMoves));
+
+        // Adds any legal castling moves to the legal move list
+        legalMoves.addAll(calculateKingCastles(legalMoves, opponentMoves));
+        // sets member field to unmodifiable collection for immutability
+        this.legalMoves = Collections.unmodifiableCollection(legalMoves);
         // Determines if player is in checking using find Attacks on Tile
         this.isInCheck = !Player.findAttacksOnTile(this.playersKing.getLocationOnBoard(), opponentMoves).isEmpty();
     }
