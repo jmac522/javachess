@@ -97,7 +97,7 @@ public class Knight extends Piece{
     
 	@Override
 	public Knight movePiece(Move move) {
-		return new Knight(move.getMovingTo, move.getMovingPiece.getColor());
+		return new Knight(move.getMovingTo(), move.getMovingPiece().getColor());
 	}
 
     @Override

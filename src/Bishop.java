@@ -80,7 +80,7 @@ public class Bishop extends Piece{
 	
 	@Override
 	public Bishop movePiece(Move move) {
-		return new Bishop(move.getMovingTo, move.getMovingPiece.getColor());
+		return new Bishop(move.getMovingTo(), move.getMovingPiece().getColor());
 	}
 
 	@Override

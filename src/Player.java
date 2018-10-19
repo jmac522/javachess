@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Player {
 	// member fields for the current gameboard, the players king, and all the legal moves
@@ -6,7 +9,7 @@ public abstract class Player {
     protected final Board board;
     protected final King playersKing;
     protected final Collection<Move> legalMoves;
-    private final isInCheck;
+    private final boolean isInCheck;
 	
 	
 	// Super Constrcutor for Player objects
@@ -23,7 +26,7 @@ public abstract class Player {
     //Method that takes a piece's location and checks opponents legal moves to see
     // which moves attack that location
     private static Collection<Move> findAttacksOnTile(final int pieceLocation, final Collection<Move> moves) {
-    	final List<Moves> attackingMoves = new ArrayList<>();
+    	final List<Move> attackingMoves = new ArrayList<>();
     	for (Move move : moves) {
     		if (pieceLocation == move.getMovingTo()) {
     			attackingMoves.add(move);
@@ -53,19 +56,19 @@ public abstract class Player {
 	
 	// Method for checking if the player is in check
     public boolean isInCheck() {
-        return this.isInCheck;
+        return this.isInCheck();
     }
 	
 	// Method for checking if a player has been mated
     public boolean isMated() {
     	// if the king is in check and has no legal escape moves, it is checkmate
-        return this.isInCheck && !hasEscapeMoves();
+        return this.isInCheck() && !hasEscapeMoves();
     }
     
     protected boolean hasEscapeMoves() {
     	for(final Move move : this.legalMoves) {
     		final MoveExecution execution = makeMove(move);
-    		if (execution.getMoveStatus.isDone()) {
+    		if (execution.getMoveStatus().isDone()) {
     			return true;
     		}
     	}
@@ -74,7 +77,7 @@ public abstract class Player {
 	
 	// Method for checking if the game is at a stalemate
     public boolean isStaleMated() {
-        return !this.isInCheck && !hasEscapeMoves();
+        return !this.isInCheck() && !hasEscapeMoves();
     }
 	
 	// Method to determine if a player has castled yet
@@ -87,8 +90,8 @@ public abstract class Player {
 	// based on the move
     public MoveExecution makeMove(final Move move) {
     	// If the move is not legal, return existing board unchanged, set status to ILLEGAL
-    	if(!isMoveLegal()) {
-    		return new MoveExecution(this.board, move, MoveStatus.ILLEGAL_MOVE)
+    	if(!isMoveLegal(move)) {
+    		return new MoveExecution(this.board, move, MoveStatus.ILLEGAL_MOVE);
     	}
     	
     	// If it is a potential legal move, create a new board representing 
@@ -97,8 +100,12 @@ public abstract class Player {
     	
     	// Create a collection of opponents legal moves that could attack the current player's
     	// King on the updatedBoard
-    	final Collection<Move> kingAttacks = Player.findAttacksOnTile(updatedBoard.getCurrentPlayer().getOpponent().getPlayerKing().getLocationOnBoard,
-    	updatedBoard.getCurrentPlayer().getLegalMoves());
+    	final Collection<Move> kingAttacks = Player.findAttacksOnTile(updatedBoard.getCurrentPlayer()
+                                                                                  .getOpponent()
+                                                                                  .getPlayerKing()
+                                                                                  .getLocationOnBoard(),
+    	                                                              updatedBoard.getCurrentPlayer()
+                                                                                  .getLegalMoves());
     	
     	if(!kingAttacks.isEmpty()) {
     		// If the opponent is attacking the moving players king after executing the move
@@ -125,4 +132,6 @@ public abstract class Player {
     public abstract Collection<Piece> getActivePieces();
     public abstract Side getSide();
     public abstract Player getOpponent();
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves,
+                                                             Collection<Move> opponentLegalMoves);
 }

@@ -4,7 +4,7 @@
  * 
  */
 
-public final class CaptureMove extends Move {
+public class CaptureMove extends Move {
 	// Holds the piece being captured on the given move 	
 	final Piece threatenedPiece;
 	
@@ -14,8 +14,38 @@ public final class CaptureMove extends Move {
 		this.threatenedPiece = threatenedPiece;
 	}
 	
-	@Overrides
-	public Board exectue() {
+	@Override
+	public Board execute() {
 		return null;
+	}
+
+	@Override
+	public boolean isAttack() {
+		return true;
+	}
+
+	@Override
+	public Piece getAttackedPiece() {
+		return this.threatenedPiece;
+	}
+
+	@Override
+	public int hashCode() {
+		//TODO: Implament hashCode
+		return 0;
+	}
+
+	@Override
+	public boolean equals(final Object other) {
+		if (this == other) {
+			return true;
+		}
+
+		if (!(other instanceof CaptureMove)) {
+			return false;
+		}
+
+		Move otherMove = (CaptureMove) other;
+		return (super.equals(otherMove) && getAttackedPiece().equals(otherMove.getAttackedPiece()));
 	}
 }

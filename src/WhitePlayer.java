@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class WhitePlayer extends Player {
 	// Constructor for White player object
@@ -22,5 +25,17 @@ public class WhitePlayer extends Player {
     @Override
     public Player getOpponent() {
         return this.board.blackPlayer();
+    }
+
+    @Override
+    protected Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves) {
+
+        final List<Move> kingCastles = new ArrayList<>();
+
+        if(!this.playersKing.isFirstMove() && !this.isInCheck()) {
+
+        }
+
+        return Collections.unmodifiableList(kingCastles);
     }
 }

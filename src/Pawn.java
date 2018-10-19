@@ -33,7 +33,7 @@ public class Pawn extends Piece {
                 // if you're moving forward and the tile is not occupied add legal move
                 // TODO: create pawn move class
                 legalMoves.add(new PassiveMove(board, this, currentPotentialMove));
-            } else if (directionalVectorOffset == 16 && !this.hasMoved() &&
+            } else if (directionalVectorOffset == 16 && !this.isFirstMove() &&
                       (GameUtilities.ROW_TWO[currentPotentialMove] && this.getColor().isWhite()) ||
                       (GameUtilities.ROW_SEVEN[currentPotentialMove] && this.getColor().isBlack())) {
                 // if pawn has not moved yet, is on the appropriate rank for its side, and
@@ -85,7 +85,7 @@ public class Pawn extends Piece {
     
 	@Override
 	public Pawn movePiece(Move move) {
-		return new Pawn(move.getMovingTo, move.getMovingPiece.getColor());
+		return new Pawn(move.getMovingTo(), move.getMovingPiece().getColor());
 	}
 
     @Override

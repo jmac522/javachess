@@ -66,7 +66,7 @@ public class Board {
     }
     
     public Player getCurrentPlayer() {
-    	return this.currentPlayer();
+    	return this.currentPlayer;
     }
 	
 	// Method for returning all of a given sides legal moves by calling each
@@ -165,11 +165,19 @@ public class Board {
         return builder.build();
     }
 
+    public List<Move> getAllLegalMoves() {
+        List legalMoves = new ArrayList();
+        legalMoves.addAll(this.whitePlayer.getLegalMoves());
+        legalMoves.addAll(this.blackPlayer.getLegalMoves());
+        return Collections.unmodifiableList(legalMoves);
+    }
+
     // Builder class to build an immutable instance of a board
     public static class Builder {
 
         Map<Integer, Piece> boardLayout;
         Side sideToMove;
+        private Pawn enPassantPawn;
 		// Initializes a hashmap to hold the boardLayout representation
         public Builder() {
             this.boardLayout = new HashMap<>();
@@ -191,6 +199,10 @@ public class Board {
 		// Creates the actually instance of the board object 
         public Board build() {
             return new Board(this);
+        }
+
+        public void setEnPassant(Pawn movedPawn) {
+            this.enPassantPawn = enPassantPawn;
         }
     }
 }

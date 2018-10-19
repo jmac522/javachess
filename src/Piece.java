@@ -13,24 +13,25 @@
 
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
 
 public abstract class Piece {
     // Properties containing the piece's position on the board and which side (W or B) it is on
     protected final int locationOnBoard;
     protected final Side color;
     // boolean to keep track of if piece has been moved yet ( especially important for pawns, rooks, and kings )
-    protected boolean hasMoved;
+    protected boolean firstMove;
     protected final PieceType pieceType;
 
     // Constructor
     Piece(final int pieceLocation, final Side color, final PieceType pieceType) {
         this.locationOnBoard = pieceLocation;
         this.color = color;
-        this.hasMoved = false;
         this.pieceType = pieceType;
+//        if (isMoving == true) {
+//            this.firstMove = false;
+//        } else {
+            this.firstMove = true;
+//        }
     }
     
     @Override public boolean equals(final Object other) {
@@ -38,27 +39,27 @@ public abstract class Piece {
     		return true;
     	}
     	
-    	if (!(other instanceof Piece) {
+    	if (!(other instanceof Piece)) {
     		return false;
     	}
     	
     	final Piece otherPiece = (Piece) other;
-    	return (this.locationOnBoard == other.getLocationOnBoard &&
-    		this.pieceType == other.getPieceType &&
-    		this.color == other.getColor() &&
-    		this.hasMoved == other.getHasMoved()) 
+    	return (this.locationOnBoard == otherPiece.getLocationOnBoard() &&
+    		this.pieceType == otherPiece.getPieceType() &&
+    		this.color == otherPiece.getColor() &&
+    		this.firstMove == otherPiece.isFirstMove());
     }
     
     @Override public int hashCode() {
     	// TODO: Implament hash code
-    	return null;
+    	return 0;
     }
 
     //getters
     public Side getColor() {
         return this.color;
     }
-    public boolean hasMoved() { return this.hasMoved; }
+    public boolean isFirstMove() { return this.firstMove; }
     public int getLocationOnBoard() { return this.locationOnBoard; }
     public PieceType getPieceType() { return this.pieceType; }
 

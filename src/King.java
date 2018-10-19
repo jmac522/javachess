@@ -80,7 +80,7 @@ public class King extends Piece{
 	
 	@Override
 	public King movePiece(Move move) {
-		return new King(move.getMovingTo, move.getMovingPiece.getColor());
+		return new King(move.getMovingTo(), move.getMovingPiece().getColor());
 	}
 	
 	// Overridden toString method for King using PieceType enum

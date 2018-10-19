@@ -57,6 +57,6 @@ public enum Side  {
     public abstract boolean isBlack();
     
     // Method used for returning a player based on a pieces Side affiliation
-    public abstract Player choosePlayer(Player whitePlayer, Player blackPlayer);
-    }
+    public abstract Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer);
 }
+
