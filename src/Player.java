@@ -25,7 +25,7 @@ public abstract class Player {
     
     //Method that takes a piece's location and checks opponents legal moves to see
     // which moves attack that location
-    private static Collection<Move> findAttacksOnTile(final int pieceLocation, final Collection<Move> moves) {
+    protected static Collection<Move> findAttacksOnTile(final int pieceLocation, final Collection<Move> moves) {
     	final List<Move> attackingMoves = new ArrayList<>();
     	for (Move move : moves) {
     		if (pieceLocation == move.getMovingTo()) {
