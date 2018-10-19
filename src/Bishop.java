@@ -12,8 +12,8 @@ public class Bishop extends Piece{
 	private static final int[] DIRECTIONAL_VECTORS  = {-9, -7, 7, 9};
     
     // Constructor for Bishop, inherits from Piece super
-    Bishop(final int pieceLocation, final Side color) {
-		super(pieceLocation, color, PieceType.BISHOP);
+    Bishop(final int pieceLocation, final Side color, final boolean isFirstMove) {
+		super(pieceLocation, color, PieceType.BISHOP, isFirstMove);
 	}
 
     @Override
@@ -80,7 +80,7 @@ public class Bishop extends Piece{
 	
 	@Override
 	public Bishop movePiece(Move move) {
-		return new Bishop(move.getMovingTo(), move.getMovingPiece().getColor());
+		return new Bishop(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
 
 	@Override

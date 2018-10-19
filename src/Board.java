@@ -123,41 +123,41 @@ public class Board {
 
         // Set up the black pieces TODO:(Could chain these methods rather than invoking
         // builder each time. Maybe ugly formatting?)
-        builder.setPiece(new Rook(0, Side.BLACK)); // A8
-        builder.setPiece(new Knight(1, Side.BLACK)); // B8
-        builder.setPiece(new Bishop(2, Side.BLACK)); // C8
-        builder.setPiece(new Queen(3, Side.BLACK)); // D8
-        builder.setPiece(new King(4, Side.BLACK)); // E8
-        builder.setPiece(new Bishop(5, Side.BLACK)); // F8
-        builder.setPiece(new Knight(6, Side.BLACK)); // G8
-        builder.setPiece(new Rook(7, Side.BLACK)); // H8
-        builder.setPiece(new Pawn(8, Side.BLACK)); // A7
-        builder.setPiece(new Pawn(9, Side.BLACK)); // B7
-        builder.setPiece(new Pawn(10, Side.BLACK)); // C7
-        builder.setPiece(new Pawn(11, Side.BLACK)); // D7
-        builder.setPiece(new Pawn(12, Side.BLACK)); // E7
-        builder.setPiece(new Pawn(13, Side.BLACK)); // F7
-        builder.setPiece(new Pawn(14, Side.BLACK)); // G7
-        builder.setPiece(new Pawn(15, Side.BLACK)); // H7
+        builder.setPiece(new Rook(0, Side.BLACK, true)); // A8
+        builder.setPiece(new Knight(1, Side.BLACK, true)); // B8
+        builder.setPiece(new Bishop(2, Side.BLACK, true)); // C8
+        builder.setPiece(new Queen(3, Side.BLACK, true)); // D8
+        builder.setPiece(new King(4, Side.BLACK, true)); // E8
+        builder.setPiece(new Bishop(5, Side.BLACK, true)); // F8
+        builder.setPiece(new Knight(6, Side.BLACK, true)); // G8
+        builder.setPiece(new Rook(7, Side.BLACK, true)); // H8
+        builder.setPiece(new Pawn(8, Side.BLACK, true)); // A7
+        builder.setPiece(new Pawn(9, Side.BLACK, true)); // B7
+        builder.setPiece(new Pawn(10, Side.BLACK, true)); // C7
+        builder.setPiece(new Pawn(11, Side.BLACK, true)); // D7
+        builder.setPiece(new Pawn(12, Side.BLACK, true)); // E7
+        builder.setPiece(new Pawn(13, Side.BLACK, true)); // F7
+        builder.setPiece(new Pawn(14, Side.BLACK, true)); // G7
+        builder.setPiece(new Pawn(15, Side.BLACK, true)); // H7
 
 
         // Set up White Pieces
-        builder.setPiece(new Pawn(48, Side.WHITE));
-        builder.setPiece(new Pawn(49, Side.WHITE));
-        builder.setPiece(new Pawn(50, Side.WHITE));
-        builder.setPiece(new Pawn(51, Side.WHITE));
-        builder.setPiece(new Pawn(52, Side.WHITE));
-        builder.setPiece(new Pawn(53, Side.WHITE));
-        builder.setPiece(new Pawn(54, Side.WHITE));
-        builder.setPiece(new Pawn(55, Side.WHITE));
-        builder.setPiece(new Rook(56, Side.WHITE));
-        builder.setPiece(new Knight(57, Side.WHITE));
-        builder.setPiece(new Bishop(58, Side.WHITE));
-        builder.setPiece(new Queen(59, Side.WHITE));
-        builder.setPiece(new King(60, Side.WHITE));
-        builder.setPiece(new Bishop(61, Side.WHITE));
-        builder.setPiece(new Knight(62, Side.WHITE));
-        builder.setPiece(new Rook(63, Side.WHITE));
+        builder.setPiece(new Pawn(48, Side.WHITE, true));
+        builder.setPiece(new Pawn(49, Side.WHITE, true));
+        builder.setPiece(new Pawn(50, Side.WHITE, true));
+        builder.setPiece(new Pawn(51, Side.WHITE, true));
+        builder.setPiece(new Pawn(52, Side.WHITE, true));
+        builder.setPiece(new Pawn(53, Side.WHITE, true));
+        builder.setPiece(new Pawn(54, Side.WHITE, true));
+        builder.setPiece(new Pawn(55, Side.WHITE, true));
+        builder.setPiece(new Rook(56, Side.WHITE, true));
+        builder.setPiece(new Knight(57, Side.WHITE, true));
+        builder.setPiece(new Bishop(58, Side.WHITE, true));
+        builder.setPiece(new Queen(59, Side.WHITE, true));
+        builder.setPiece(new King(60, Side.WHITE, true));
+        builder.setPiece(new Bishop(61, Side.WHITE, true));
+        builder.setPiece(new Knight(62, Side.WHITE, true));
+        builder.setPiece(new Rook(63, Side.WHITE, true));
 
         //white moves first
         builder.setSideToMove(Side.WHITE);

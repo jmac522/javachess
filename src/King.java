@@ -18,8 +18,8 @@ public class King extends Piece{
 
     private static final int[] POSSIBLE_MOVES  = {-8, 8, -1, 1, -9, 9, -7, 7};
 
-    King(final int pieceLocation, final Side color) {
-        super(pieceLocation, color, PieceType.KING);
+    King(final int pieceLocation, final Side color, final boolean isFirstMove) {
+        super(pieceLocation, color, PieceType.KING, isFirstMove);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class King extends Piece{
 	
 	@Override
 	public King movePiece(Move move) {
-		return new King(move.getMovingTo(), move.getMovingPiece().getColor());
+		return new King(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
 	
 	// Overridden toString method for King using PieceType enum

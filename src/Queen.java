@@ -10,9 +10,9 @@ public class Queen extends Piece {
 	private static final int[] DIRECTIONAL_VECTORS  = {-8, 8, -1, 1, -9, 9, -7, 7};
     
     // Constructor for Queen, inherits from Piece super
-    Queen(final int pieceLocation, final Side color) {
-        super(pieceLocation, color, PieceType.QUEEN);
-    }
+    Queen(final int pieceLocation, final Side color, final boolean isFirstMove) {
+		super(pieceLocation, color, PieceType.QUEEN, isFirstMove);
+	}
 	
 	@Override
     public Collection<Move> getLegalMoves(Board board) {
@@ -84,7 +84,7 @@ public class Queen extends Piece {
 
 	@Override
 	public Queen movePiece(Move move) {
-		return new Queen(move.getMovingTo(), move.getMovingPiece().getColor());
+		return new Queen(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
 
 	@Override

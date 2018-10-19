@@ -19,10 +19,11 @@ public abstract class Player {
         this.board = board;
         this.playersKing = initKing();
         this.legalMoves = legalMoves;
+        this.legalMoves.addAll(calculateKingCastles(legalMoves, opponentMoves));
         // Determines if player is in checking using find Attacks on Tile
         this.isInCheck = !Player.findAttacksOnTile(this.playersKing.getLocationOnBoard(), opponentMoves).isEmpty();
     }
-    
+
     //Method that takes a piece's location and checks opponents legal moves to see
     // which moves attack that location
     protected static Collection<Move> findAttacksOnTile(final int pieceLocation, final Collection<Move> moves) {

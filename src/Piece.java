@@ -23,15 +23,12 @@ public abstract class Piece {
     protected final PieceType pieceType;
 
     // Constructor
-    Piece(final int pieceLocation, final Side color, final PieceType pieceType) {
+    Piece(final int pieceLocation, final Side color, final PieceType pieceType, boolean firstMove) {
         this.locationOnBoard = pieceLocation;
         this.color = color;
         this.pieceType = pieceType;
-//        if (isMoving == true) {
-//            this.firstMove = false;
-//        } else {
-            this.firstMove = true;
-//        }
+        this.firstMove = firstMove;
+
     }
     
     @Override public boolean equals(final Object other) {
@@ -79,10 +76,20 @@ public abstract class Piece {
             public boolean isKing() {
                 return false;
             }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
         },
         KNIGHT("N"){
             @Override
             public boolean isKing() {
+                return false;
+            }
+
+            @Override
+            public boolean isRook() {
                 return false;
             }
         },
@@ -91,11 +98,21 @@ public abstract class Piece {
             public boolean isKing() {
                 return false;
             }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
         },
         ROOK("R"){
             @Override
             public boolean isKing() {
                 return false;
+            }
+
+            @Override
+            public boolean isRook() {
+                return true;
             }
         },
         QUEEN("Q"){
@@ -103,11 +120,21 @@ public abstract class Piece {
             public boolean isKing() {
                 return false;
             }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
         },
         KING("K"){
             @Override
             public boolean isKing() {
                 return true;
+            }
+
+            @Override
+            public boolean isRook() {
+                return false;
             }
         };
 		
@@ -128,5 +155,6 @@ public abstract class Piece {
 		
 		// Abstract method used in checking if a Piece is a king 
         public abstract boolean isKing();
+        public abstract boolean isRook();
     }
 }

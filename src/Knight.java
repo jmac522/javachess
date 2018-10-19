@@ -14,8 +14,8 @@ public class Knight extends Piece{
     private final static int[] POTENTIAL_MOVES = { -6,  6, -10, 10, -15, 15, -17, 17};
 
     // Constructor for Knight, inherits from Piece super
-    Knight(final int pieceLocation, final Side color) {
-        super(pieceLocation, color, PieceType.KNIGHT);
+    Knight(final int pieceLocation, final Side color, final boolean isFirstMove) {
+        super(pieceLocation, color, PieceType.KNIGHT, isFirstMove);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Knight extends Piece{
     
 	@Override
 	public Knight movePiece(Move move) {
-		return new Knight(move.getMovingTo(), move.getMovingPiece().getColor());
+		return new Knight(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
 
     @Override

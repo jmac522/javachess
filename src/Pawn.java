@@ -10,8 +10,8 @@ public class Pawn extends Piece {
 
 
 
-    Pawn(final int pieceLocation, final Side color) {
-        super(pieceLocation, color, PieceType.PAWN);
+    Pawn(final int pieceLocation, final Side color , final boolean isFirstMove) {
+        super(pieceLocation, color, PieceType.PAWN, isFirstMove);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Pawn extends Piece {
     
 	@Override
 	public Pawn movePiece(Move move) {
-		return new Pawn(move.getMovingTo(), move.getMovingPiece().getColor());
+		return new Pawn(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
 
     @Override

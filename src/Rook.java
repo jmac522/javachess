@@ -9,8 +9,8 @@ public class Rook extends Piece {
 	private static final int[] DIRECTIONAL_VECTORS  = {-8, 8, -1, 1};
     
     // Constructor for Rook, inherits from Piece super
-    Rook(final int pieceLocation, final Side color) {
-        super(pieceLocation, color, PieceType.ROOK);
+    Rook(final int pieceLocation, final Side color, final boolean isFirstMove) {
+        super(pieceLocation, color, PieceType.ROOK, isFirstMove);
     }
     
     @Override
@@ -75,7 +75,7 @@ public class Rook extends Piece {
 	
 	@Override
 	public Rook movePiece(Move move) {
-		return new Rook(move.getMovingTo(), move.getMovingPiece().getColor());
+		return new Rook(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
 
 	@Override

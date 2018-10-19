@@ -40,9 +40,14 @@ public class WhitePlayer extends Player {
                 if(rookSquare.isOccupied() && rookSquare.getPiece().isFirstMove()) {
                     if(Player.findAttacksOnTile(61, opponentLegalMoves).isEmpty() &&
                        Player.findAttacksOnTile(62, opponentLegalMoves).isEmpty()) {
-
-                        // TODO: add in castle move
-                        kingCastles.add(null);
+                        if (rookSquare.getPiece().pieceType.isRook()) {
+                            kingCastles.add(new CastleMove.KingSideCastleMove(this.board,
+                                    this.getPlayerKing(),
+                                    62,
+                                    (Rook) rookSquare.getPiece(),
+                                    rookSquare.getPiece().getLocationOnBoard(),
+                                    61 ));
+                        }
                     }
                 }
             }
@@ -56,8 +61,14 @@ public class WhitePlayer extends Player {
                     if (Player.findAttacksOnTile(59, opponentLegalMoves).isEmpty() &&
                         Player.findAttacksOnTile(58, opponentLegalMoves).isEmpty() &&
                         Player.findAttacksOnTile(57, opponentLegalMoves).isEmpty()) {
-                        // TODO: add in castle move
-                        kingCastles.add(null);
+                        if (rookSquare.getPiece().pieceType.isRook()) {
+                            kingCastles.add(new CastleMove.QueenSideCastleMove(this.board,
+                                    this.getPlayerKing(),
+                                    58,
+                                    (Rook) rookSquare.getPiece(),
+                                    rookSquare.getPiece().getLocationOnBoard(),
+                                    59 ));
+                        }
                     }
                 }
             }
