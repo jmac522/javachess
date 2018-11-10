@@ -4,7 +4,6 @@
  * 
  */
 
-// TODO: Find A BETTER NAME IDIOT!
 public final class PassiveMove extends Move {
 	
 	PassiveMove(final Board board, final Piece movingPiece, final int movingTo) {
@@ -12,5 +11,10 @@ public final class PassiveMove extends Move {
 	}
 	
 	// Method to execute a passive move (non capturing) by a Knight, Rook, or Bishop
+	@Override
+	public String toString() {
 
+		return movingPiece.pieceType.moveNotation() + GameUtilities.moveNameLookup.get(movingPiece.locationOnBoard) +
+				" " + GameUtilities.moveNameLookup.get(movingTo);
+	}
 }

@@ -1,0 +1,135 @@
+.dark-board-square {
+    -fx-background-color: rgba(171, 76, 22, 1) ;
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    -fx-text-alignment: center
+}
+
+.light-board-square {
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(239, 199, 155, 1);
+    -fx-text-alignment: center
+}
+
+.hovered-board-square {
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(167, 129, 107, 1) ;
+    -fx-text-alignment: center;
+}
+
+.selected-board-square {
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(62, 155, 36, 0.8) ;
+    -fx-text-alignment: center;
+}
+
+.attacked-board-square {
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255, 30, 0, 1) ;
+    -fx-text-alignment: center;
+}
+
+.empty-legal-move-board-square {
+    -fx-background-image: url("img_assets/grey-circle.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 50 50;
+    -fx-background-position: center center;
+}
+
+.white-pawn {
+    -fx-background-image: url("img_assets/white_pawn.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.black-pawn {
+    -fx-background-image: url("img_assets/black_pawn.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.white-bishop {
+    -fx-background-image: url("img_assets/white_bishop.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.black-bishop {
+    -fx-background-image: url("img_assets/black_bishop.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.white-knight {
+    -fx-background-image: url("img_assets/white_knight.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.black-knight {
+    -fx-background-image: url("img_assets/black_knight.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.white-rook {
+    -fx-background-image: url("img_assets/white_rook.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.black-rook {
+    -fx-background-image: url("img_assets/black_rook.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.white-queen {
+    -fx-background-image: url("img_assets/white_queen.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.black-queen {
+    -fx-background-image: url("img_assets/black_queen.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.white-king {
+    -fx-background-image: url("img_assets/white_king.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.black-king {
+    -fx-background-image: url("img_assets/black_king.png");
+    -fx-background-repeat: none;
+    -fx-background-size: 80 80;
+    -fx-background-position: center center;
+}
+
+.empty-square {
+
+}
+
+.move-table-cell {
+    -fx-font: 10 arial;
+    -fx-border-color: black;
+    -fx-text-color: black;
+}

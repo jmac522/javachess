@@ -6,9 +6,12 @@ import java.util.List;
 public class BlackPlayer extends Player {
 	
 	// Constructor for the Black Player
-    public BlackPlayer(Board board, Collection<Move> whiteInitialLegalMoves, Collection<Move> blackInitialLegalMoves) {
+    public BlackPlayer(Board board,
+                       Collection<Move> whiteInitialLegalMoves,
+                       Collection<Move> blackInitialLegalMoves,
+                       PlayerType playerType) {
 
-        super(board, blackInitialLegalMoves, whiteInitialLegalMoves);
+        super(board, blackInitialLegalMoves, whiteInitialLegalMoves, playerType);
     }
 	
 	// Method to return all active black pieces
@@ -31,11 +34,20 @@ public class BlackPlayer extends Player {
     }
 
     @Override
-    protected Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves) {
+    public double getPlayersHeuristic() {
+        double heuristicSum = 0;
+        for (Piece piece : this.getActivePieces()) {
+            heuristicSum -= piece.getPieceHeuristic();
+        }
+        return heuristicSum;
+    }
+
+    @Override
+    public Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves) {
 
         final List<Move> kingCastles = new ArrayList<>();
         // White KingSide Castle
-        if(!this.playersKing.isFirstMove() && !this.isInCheck()) {
+        if(this.playersKing.isFirstMove() && !this.isInCheck()) {
             if (!this.board.getBoardSquare(6).isOccupied() &&
                     !this.board.getBoardSquare(5).isOccupied() ) {
                 final BoardSquare rookSquare = this.board.getBoardSquare(7);

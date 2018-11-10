@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Queen extends Piece {
 	
-	// constant holding vector values for all 4 directions of Rook movement
+	// constant holding vector values for all 8 directions of Queen movement
 	private static final int[] DIRECTIONAL_VECTORS  = {-8, 8, -1, 1, -9, 9, -7, 7};
     
     // Constructor for Queen, inherits from Piece super

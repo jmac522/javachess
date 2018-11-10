@@ -16,7 +16,27 @@ public class CaptureMove extends Move {
 	
 	@Override
 	public Board execute() {
-		return null;
+
+		final Board.Builder builder = new Board.Builder();
+		for (final Piece piece : this.board.getCurrentPlayer().getActivePieces()) {
+			// Loop through all of the pieces of the player making the move, if a piece
+			// is not the one being moved, it can be added to the board in its current
+			// position
+			if(!this.movingPiece.equals(piece)) {
+				builder.setPiece(piece);
+			}
+		}
+
+		for (final Piece piece : this.board.getCurrentPlayer().getOpponent().getActivePieces()) {
+		    if (piece != threatenedPiece) {
+                builder.setPiece(piece);
+            }
+		}
+		// Move the piece
+		builder.setPiece(this.movingPiece.movePiece(this));
+		builder.setSideToMove(this.board.getCurrentPlayer().getOpponent().getSide());
+
+		return builder.build();
 	}
 
 	@Override
@@ -34,6 +54,12 @@ public class CaptureMove extends Move {
 		//TODO: Implament hashCode
 		return 0;
 	}
+
+    @Override
+    public String toString() {
+        return movingPiece.pieceType.moveNotation() + GameUtilities.moveNameLookup.get(movingPiece.locationOnBoard) + " x " +
+                threatenedPiece.pieceType.moveNotation() + GameUtilities.moveNameLookup.get(movingTo);
+    }
 
 	@Override
 	public boolean equals(final Object other) {

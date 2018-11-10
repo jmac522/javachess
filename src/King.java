@@ -59,7 +59,7 @@ public class King extends Piece{
         }
 
         // Return an unmodifiable collection containing the legal moves list
-        return Collections.unmodifiableList(legalMoves);
+        return legalMoves;
     }
 
     // Method to handle edge case for determining illegal moves when the king is on the "a" (leftmost) column of the

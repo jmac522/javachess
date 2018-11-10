@@ -66,12 +66,23 @@ public abstract class Piece {
 	// Abstract method for moving a piece based on a passed move object. Generate a piece that
 	// retains all properties of current Piece but with updated location on board
 	public abstract Piece movePiece(Move move);
-	
+
+	// Method for returning a pieces heuristic value based on its type and position for the minimax algorithm
+    public double getPieceHeuristic() {
+        return this.pieceType.getPieceAdjustedHeuristic(this.color, this.locationOnBoard);
+    }
+
+
     // enum for piece types for use in toString Methods and checking piece type
     // when needed
     public enum PieceType {
 
-        PAWN("P") {
+        PAWN("pawn", 10) {
+            @Override
+            public String moveNotation() {
+                return "P";
+            }
+
             @Override
             public boolean isKing() {
                 return false;
@@ -81,8 +92,24 @@ public abstract class Piece {
             public boolean isRook() {
                 return false;
             }
+
+            @Override
+            public double getPieceAdjustedHeuristic(Side side, int location) {
+                if (side == Side.BLACK) {
+                    //return GameUtilities.BLACK_PAWN_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                } else {
+                    //return GameUtilities.WHITE_PAWN_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                }
+            }
         },
-        KNIGHT("N"){
+        KNIGHT("knight", 30){
+            @Override
+            public String moveNotation() {
+                return "N";
+            }
+
             @Override
             public boolean isKing() {
                 return false;
@@ -92,8 +119,24 @@ public abstract class Piece {
             public boolean isRook() {
                 return false;
             }
+
+            @Override
+            public double getPieceAdjustedHeuristic(Side side, int location) {
+                if (side == Side.BLACK) {
+                    //return GameUtilities.BLACK_KNIGHT_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                } else {
+                    //return GameUtilities.WHITE_KNIGHT_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                }
+            }
         },
-        BISHOP("B"){
+        BISHOP("bishop", 30){
+            @Override
+            public String moveNotation() {
+                return "B";
+            }
+
             @Override
             public boolean isKing() {
                 return false;
@@ -103,8 +146,24 @@ public abstract class Piece {
             public boolean isRook() {
                 return false;
             }
+
+            @Override
+            public double getPieceAdjustedHeuristic(Side side, int location) {
+                if (side == Side.BLACK) {
+                    //return GameUtilities.BLACK_BISHOP_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                } else {
+                    //return GameUtilities.WHITE_BISHOP_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                }
+            }
         },
-        ROOK("R"){
+        ROOK("rook", 50){
+            @Override
+            public String moveNotation() {
+                return "R";
+            }
+
             @Override
             public boolean isKing() {
                 return false;
@@ -114,8 +173,24 @@ public abstract class Piece {
             public boolean isRook() {
                 return true;
             }
+
+            @Override
+            public double getPieceAdjustedHeuristic(Side side, int location) {
+                if (side == Side.BLACK) {
+                    //return GameUtilities.BLACK_ROOK_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                } else {
+                    //return GameUtilities.WHITE_ROOK_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                }
+            }
         },
-        QUEEN("Q"){
+        QUEEN("queen", 90){
+            @Override
+            public String moveNotation() {
+                return "Q";
+            }
+
             @Override
             public boolean isKing() {
                 return false;
@@ -125,8 +200,24 @@ public abstract class Piece {
             public boolean isRook() {
                 return false;
             }
+
+            @Override
+            public double getPieceAdjustedHeuristic(Side side, int location) {
+                if (side == Side.BLACK) {
+                    //return GameUtilities.BLACK_QUEEN_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                } else {
+                    //return GameUtilities.WHITE_QUEEN_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                }
+            }
         },
-        KING("K"){
+        KING("king", 900){
+            @Override
+            public String moveNotation() {
+                return "K";
+            }
+
             @Override
             public boolean isKing() {
                 return true;
@@ -135,15 +226,27 @@ public abstract class Piece {
             @Override
             public boolean isRook() {
                 return false;
+            }
+
+            @Override
+            public double getPieceAdjustedHeuristic(Side side, int location) {
+                if (side == Side.BLACK) {
+                    //return GameUtilities.BLACK_KING_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                } else {
+                    //return GameUtilities.WHITE_KING_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    return this.getBaseHeuristic();
+                }
             }
         };
 		
 		// Memberfield to hold a string representation for a given piece type
         private String pieceName;
-		
+		private double baseHeuristic;
 		// Constructor 
-        PieceType(final String pieceName) {
+        PieceType(final String pieceName, double baseHeuristic) {
             this.pieceName = pieceName;
+            this.baseHeuristic = baseHeuristic;
         }
 		
 		// toString method for printing a string representation in a piece
@@ -152,9 +255,16 @@ public abstract class Piece {
         public String toString() {
             return this.pieceName;
         }
-		
+
+        // Method to get a PieceTypes base heuristic
+        public double getBaseHeuristic() {
+            return this.baseHeuristic;
+        }
+
+        public abstract String moveNotation();
 		// Abstract method used in checking if a Piece is a king 
         public abstract boolean isKing();
         public abstract boolean isRook();
+        public abstract double getPieceAdjustedHeuristic(Side side, int location);
     }
 }

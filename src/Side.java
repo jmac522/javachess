@@ -26,6 +26,17 @@ public enum Side  {
         public Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer){
         	return whitePlayer;
         }
+
+        @Override
+        public String toString() {
+            // to string will be used in assigning class names for appropriate piece assets
+            return "white-";
+        }
+
+        @Override
+        public String turnMessage() {
+            return "White to move!";
+        }
     },
     BLACK {
         @Override
@@ -47,6 +58,17 @@ public enum Side  {
         public Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer){
         	return blackPlayer;
         }
+
+        @Override
+        public String toString() {
+            // to string will be used in assigning class names for appropriate piece assets
+            return "black-";
+        }
+
+        @Override
+        public String turnMessage() {
+            return "Black to move!";
+        }
     };
 
     // Method for getting movement direction based on side (Black is moving in Positive direction, White in Negative)
@@ -58,5 +80,8 @@ public enum Side  {
     
     // Method used for returning a player based on a pieces Side affiliation
     public abstract Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer);
+
+    public abstract String toString();
+    public abstract String turnMessage();
 }
 

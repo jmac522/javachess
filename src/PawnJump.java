@@ -20,4 +20,12 @@ public class PawnJump extends Move {
         builder.setSideToMove(this.board.getCurrentPlayer().getOpponent().getSide());
         return builder.build();
     }
+
+    // Method to execute a passive move (non capturing) by a Knight, Rook, or Bishop
+    @Override
+    public String toString() {
+
+        return movingPiece.pieceType.moveNotation() + GameUtilities.moveNameLookup.get(movingPiece.locationOnBoard) +
+                " " + GameUtilities.moveNameLookup.get(movingTo);
+    }
 }

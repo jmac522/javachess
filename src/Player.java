@@ -1,7 +1,8 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
+import java.io.InputStream;
+import java.util.*;
 
 public abstract class Player {
 	// member fields for the current gameboard, the players king, and all the legal moves
@@ -10,21 +11,29 @@ public abstract class Player {
     protected final King playersKing;
     protected final Collection<Move> legalMoves;
     private final boolean isInCheck;
+    protected final PlayerType playerType;
+
 	
 	
 	// Super Constrcutor for Player objects
     Player(final Board board,
            final Collection<Move> legalMoves,
-           final Collection<Move> opponentMoves) {
+           final Collection<Move> opponentMoves,
+           final PlayerType playerType) {
         this.board = board;
         this.playersKing = initKing();
-
-        // Adds any legal castling moves to the legal move list
-        legalMoves.addAll(calculateKingCastles(legalMoves, opponentMoves));
-        // sets member field to unmodifiable collection for immutability
-        this.legalMoves = Collections.unmodifiableCollection(legalMoves);
-        // Determines if player is in checking using find Attacks on Tile
-        this.isInCheck = !Player.findAttacksOnTile(this.playersKing.getLocationOnBoard(), opponentMoves).isEmpty();
+        this.playerType = playerType;
+        if (this.playersKing != null) {
+            // Adds any legal castling moves to the legal move list
+            legalMoves.addAll(calculateKingCastles(legalMoves, opponentMoves));
+            // sets member field to unmodifiable collection for immutability
+            this.legalMoves = Collections.unmodifiableCollection(legalMoves);
+            // Determines if player is in checking using find Attacks on Tile
+            this.isInCheck = !Player.findAttacksOnTile(this.playersKing.getLocationOnBoard(), opponentMoves).isEmpty();
+        } else {
+            this.legalMoves = null;
+            this.isInCheck = false;
+        }
     }
 
     //Method that takes a piece's location and checks opponents legal moves to see
@@ -50,7 +59,8 @@ public abstract class Player {
         }
         // if we reach this point, there was no king on the board and this is
         // invalid (Should never get here)
-        throw new RuntimeException("No King on board, invalid game.");
+        // throw new RuntimeException("No King on board, invalid game.");
+        return null;
     }
 	
 	// Method for checking if a given move is contained within the possible legal moves
@@ -60,7 +70,7 @@ public abstract class Player {
 	
 	// Method for checking if the player is in check
     public boolean isInCheck() {
-        return this.isInCheck();
+        return this.isInCheck;
     }
 	
 	// Method for checking if a player has been mated
@@ -101,16 +111,23 @@ public abstract class Player {
     	// If it is a potential legal move, create a new board representing 
     	// the new state if the move is executed
     	final Board updatedBoard = move.execute();
-    	
+    	Collection<Move> kingAttacks;
     	// Create a collection of opponents legal moves that could attack the current player's
     	// King on the updatedBoard
-    	final Collection<Move> kingAttacks = Player.findAttacksOnTile(updatedBoard.getCurrentPlayer()
-                                                                                  .getOpponent()
-                                                                                  .getPlayerKing()
-                                                                                  .getLocationOnBoard(),
-    	                                                              updatedBoard.getCurrentPlayer()
-                                                                                  .getLegalMoves());
-    	
+        if (updatedBoard.getCurrentPlayer()
+                .getOpponent()
+                .getPlayerKing() != null) {
+            kingAttacks = Player.findAttacksOnTile(updatedBoard.getCurrentPlayer()
+                            .getOpponent()
+                            .getPlayerKing()
+                            .getLocationOnBoard(),
+                    updatedBoard.getCurrentPlayer()
+                            .getLegalMoves());
+        } else {
+            kingAttacks = new ArrayList<>();
+        }
+
+
     	if(!kingAttacks.isEmpty()) {
     		// If the opponent is attacking the moving players king after executing the move
     		// this is an illegal move as it would put the player in check so
@@ -131,11 +148,118 @@ public abstract class Player {
     public Collection<Move> getLegalMoves(){
     	return this.legalMoves;
     }
+    public PlayerType getPlayerType() { return this.playerType; }
+
+
+    // Method to return a random move for a computer player
+    public void computerRandomMove(Player computerPlayer) {
+        // Get the computers legal moves and lengths
+        Collection<Move> computerLegalMoves = computerPlayer.getLegalMoves();
+        int movesSize = computerLegalMoves.size();
+        Random rand = new Random();
+        MoveStatus currentStatus = MoveStatus.ILLEGAL_MOVE;
+        MoveExecution me = null;
+        Move selectedMoved = null;
+        // Until an executable move is found, keep selecting a random move from the potential moves list
+        while (currentStatus != MoveStatus.DONE) {
+            int randomIndex = rand.nextInt(movesSize);
+            selectedMoved = (Move) computerLegalMoves.toArray()[randomIndex];
+            me = computerPlayer.makeMove(selectedMoved);
+            currentStatus = me.getMoveStatus();
+        }
+        if (me.getMoveStatus() == MoveStatus.DONE) {
+            GameUtilities.updateBoard(selectedMoved);
+        }
+    }
+
+    public void miniMaxRootMove(int depth, Board board, boolean isMaximisingPlayer) {
+
+        Collection<Move> possibleMoves = this.getLegalMoves();
+        double bestMove = -10000;
+        Move bestMoveFound = null;
+
+        for(Move move : possibleMoves) {
+            Board tempBoard = move.execute();
+            double currentCandidateMoveValue = alphaBetaMiniMax(depth - 1, tempBoard, -10000,
+                                                      10000, !isMaximisingPlayer);
+            if(currentCandidateMoveValue >= bestMove) {
+                bestMove = currentCandidateMoveValue;
+                if (this.makeMove(move).getMoveStatus() == MoveStatus.DONE) {
+                    bestMoveFound = move;
+                }
+            }
+        }
+        if (bestMoveFound != null) {
+            GameUtilities.updateBoard(bestMoveFound);
+        } else {
+            computerRandomMove(this);
+        }
+
+    }
+
+    private double alphaBetaMiniMax(int depth, Board board, double alpha, double beta, boolean isMaximisingPlayer) {
+        if (depth == 0) {
+            double testVar = -(board.getCurrentPlayer().getPlayersHeuristic());
+            return testVar;
+        }
+
+        Collection<Move> candidateMoves = board.getCurrentPlayer().getLegalMoves();
+
+        if (isMaximisingPlayer) {
+            double bestMove = -10000;
+            for (Move move : candidateMoves) {
+                MoveExecution moveAttempt = board.getCurrentPlayer().makeMove(move);
+                if (moveAttempt.getMoveStatus() == MoveStatus.DONE) {
+                    Board tempBoard = moveAttempt.getTransitionBoard();
+                    bestMove = Math.max(bestMove, alphaBetaMiniMax(depth  - 1, tempBoard, alpha,
+                            beta, false));
+                    alpha = Math.max(alpha, bestMove);
+                    if (beta <= alpha) {
+                        return bestMove;
+                    }
+                }
+            }
+            return bestMove;
+        } else {
+            double bestMove = 10000;
+            for (Move move : candidateMoves) {
+                MoveExecution moveAttempt = board.getCurrentPlayer().makeMove(move);
+                if (moveAttempt.getMoveStatus() == MoveStatus.DONE) {
+                    Board tempBoard = moveAttempt.getTransitionBoard();
+                    bestMove = Math.min(bestMove, alphaBetaMiniMax(depth -1, tempBoard, alpha,
+                            beta, true));
+                    beta = Math.min(beta, bestMove);
+                    if (beta <= alpha) {
+                        return bestMove;
+                    }
+                }
+            }
+            return bestMove;
+        }
+    }
+
 	
 	// Abstract methods to be overridden in player subclasses
+    public abstract double getPlayersHeuristic();
     public abstract Collection<Piece> getActivePieces();
     public abstract Side getSide();
     public abstract Player getOpponent();
-    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves,
+    public abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves,
                                                              Collection<Move> opponentLegalMoves);
+    public enum PlayerType {
+        HUMAN {
+            @Override
+            public boolean isComputer() {
+                return false;
+            }
+        },
+        COMPUTER {
+            @Override
+            public boolean isComputer() {
+                return true;
+            }
+        };
+
+        public abstract boolean isComputer();
+    }
 }
