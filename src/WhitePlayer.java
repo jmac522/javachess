@@ -13,9 +13,10 @@ public class WhitePlayer extends Player {
     }
 
     @Override
-    public double getPlayersHeuristic() {
+    public double getPlayersHeuristic(Board board) {
         double heuristicSum = 0;
-        for (Piece piece : this.getActivePieces()) {
+        Collection<Piece> activePieces = board.getAllActivePieces();
+        for (Piece piece : activePieces) {
             heuristicSum += piece.getPieceHeuristic();
         }
         return heuristicSum;

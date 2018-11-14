@@ -129,6 +129,9 @@
     <copy todir="${artifact.temp.output.JavaChess}">
       <fileset dir="${javachess.output.dir}"/>
     </copy>
+    <copy todir="${artifact.temp.output.JavaChess}">
+      <fileset dir="${basedir}/src"/>
+    </copy>
     <fx:fileset id="all_but_JavaChess" dir="${artifact.temp.output.JavaChess}" includes="**/*.jar">
       <exclude name="JavaChess.jar"/>
     </fx:fileset>

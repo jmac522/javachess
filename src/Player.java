@@ -40,11 +40,13 @@ public abstract class Player {
     // which moves attack that location
     protected static Collection<Move> findAttacksOnTile(final int pieceLocation, final Collection<Move> moves) {
     	final List<Move> attackingMoves = new ArrayList<>();
-    	for (Move move : moves) {
-    		if (pieceLocation == move.getMovingTo()) {
-    			attackingMoves.add(move);
-    		}
-    	}
+    	if (moves != null) {
+            for (Move move : moves) {
+                if (pieceLocation == move.getMovingTo()) {
+                    attackingMoves.add(move);
+                }
+            }
+        }
     	return Collections.unmodifiableList(attackingMoves);
     }
 	
@@ -173,11 +175,15 @@ public abstract class Player {
     }
 
     public void miniMaxRootMove(int depth, Board board, boolean isMaximisingPlayer) {
+        // Set up benchmark tracker
+        GameDriver.benchmarkTracker.updateBenchmark(0);
 
+        // Collect possible legal moves, set counter to keep track of their values
         Collection<Move> possibleMoves = this.getLegalMoves();
         double bestMove = -10000;
         Move bestMoveFound = null;
 
+        // Loop through each of the moves
         for(Move move : possibleMoves) {
             Board tempBoard = move.execute();
             double currentCandidateMoveValue = alphaBetaMiniMax(depth - 1, tempBoard, -10000,
@@ -194,53 +200,81 @@ public abstract class Player {
         } else {
             computerRandomMove(this);
         }
-
     }
 
     private double alphaBetaMiniMax(int depth, Board board, double alpha, double beta, boolean isMaximisingPlayer) {
+        // Update benchmark tracker
+        BenchmarkTracker tracker = GameDriver.benchmarkTracker;
+        tracker.updateBenchmark(tracker.getPositionsCalculated() + 1);
+
+        // If desired search depth is reached, return the pieces heuristics.  Inverting value, as computer is currently
+        // always played by black
         if (depth == 0) {
-            double testVar = -(board.getCurrentPlayer().getPlayersHeuristic());
+            double testVar = -(board.getCurrentPlayer().getPlayersHeuristic(board));
             return testVar;
         }
 
+        // Get all the possible legal moves for the current player
         Collection<Move> candidateMoves = board.getCurrentPlayer().getLegalMoves();
 
+
         if (isMaximisingPlayer) {
+            // if maxing player, start best move at arbitrary low value
             double bestMove = -10000;
+
+            // Loop through each of the possible moves
             for (Move move : candidateMoves) {
+                // Attempt a move execution to determine if it is valid
                 MoveExecution moveAttempt = board.getCurrentPlayer().makeMove(move);
+                // If the move can be executed ( i.e. doesn't leave player in check, etc.)
                 if (moveAttempt.getMoveStatus() == MoveStatus.DONE) {
+                    // Get a representation of the board if the current move were executed
                     Board tempBoard = moveAttempt.getTransitionBoard();
+                    // Compare current best found move to minimax value from next depth, select the larger of the two
                     bestMove = Math.max(bestMove, alphaBetaMiniMax(depth  - 1, tempBoard, alpha,
                             beta, false));
+                    // Adjust alpha based on best move
                     alpha = Math.max(alpha, bestMove);
+                    // if beta < alpha, this node does not need to be searched further
                     if (beta <= alpha) {
                         return bestMove;
                     }
                 }
             }
+            // return the result
             return bestMove;
         } else {
+            // if maxing player, start best move at arbitrary large value
             double bestMove = 10000;
+
+            // Loop through each of the possible moves
             for (Move move : candidateMoves) {
+                // Attempt a move execution to determine if it is valid
                 MoveExecution moveAttempt = board.getCurrentPlayer().makeMove(move);
-                if (moveAttempt.getMoveStatus() == MoveStatus.DONE) {
+                // If the move can be executed ( i.e. doesn't leave player in check, etc.)
+                if (moveAttempt.getMoveStatus() == MoveStatus.DONE &&
+                !(move instanceof CaptureMove && (move.getAttackedPiece().pieceType == Piece.PieceType.KING))) {
+                    // Get a representation of the board if the current move were executed
                     Board tempBoard = moveAttempt.getTransitionBoard();
+                    // Compare current best found move to minimax value from next depth, select the smaller of the two
                     bestMove = Math.min(bestMove, alphaBetaMiniMax(depth -1, tempBoard, alpha,
                             beta, true));
+                    // Adjust beta based on best move
                     beta = Math.min(beta, bestMove);
+                    // if beta < alpha, this node does not need to be searched further
                     if (beta <= alpha) {
                         return bestMove;
                     }
                 }
             }
+            // return the result
             return bestMove;
         }
     }
 
 	
 	// Abstract methods to be overridden in player subclasses
-    public abstract double getPlayersHeuristic();
+    public abstract double getPlayersHeuristic(Board board);
     public abstract Collection<Piece> getActivePieces();
     public abstract Side getSide();
     public abstract Player getOpponent();

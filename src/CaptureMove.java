@@ -49,12 +49,6 @@ public class CaptureMove extends Move {
 		return this.threatenedPiece;
 	}
 
-	@Override
-	public int hashCode() {
-		//TODO: Implament hashCode
-		return 0;
-	}
-
     @Override
     public String toString() {
         return movingPiece.pieceType.moveNotation() + GameUtilities.moveNameLookup.get(movingPiece.locationOnBoard) + " x " +

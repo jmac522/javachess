@@ -113,6 +113,19 @@ public class Board {
         return Collections.unmodifiableList(activePieces);
     }
 
+    // Method for getting all active pieces on the board for piece heuristic calculations
+    public Collection<Piece> getAllActivePieces() {
+        final List<Piece> activePieces = new ArrayList<>();
+
+        for (final BoardSquare square : this.gameBoard) {
+            if (square.isOccupied()) {
+                final Piece piece = square.getPiece();
+                activePieces.add(piece);
+            }
+        }
+        return Collections.unmodifiableList(activePieces);
+    }
+
 	// Gets a boardsquare at a given location on the gameboard
     public BoardSquare getBoardSquare(final int location) {
         return this.gameBoard.get(location);

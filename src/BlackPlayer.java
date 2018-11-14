@@ -34,10 +34,10 @@ public class BlackPlayer extends Player {
     }
 
     @Override
-    public double getPlayersHeuristic() {
+    public double getPlayersHeuristic(Board board) {
         double heuristicSum = 0;
-        for (Piece piece : this.getActivePieces()) {
-            heuristicSum -= piece.getPieceHeuristic();
+        for (Piece piece : board.getAllActivePieces()) {
+            heuristicSum += piece.getPieceHeuristic();
         }
         return heuristicSum;
     }

@@ -51,52 +51,6 @@ public class UnoccupiedBoardSquare extends BoardSquare {
                     MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
                     if (me.getMoveStatus() == MoveStatus.DONE) {
                         GameUtilities.updateBoard(move);
-                        // Update the bottom text with the appropriate message
-                        /*String bottomMessage = "";
-                        //
-                        if (GameDriver.activeGameBoard.getCurrentPlayer().isInCheck()) {
-                            bottomMessage += "Check! ";
-                        }
-                        bottomMessage += GameDriver.sideToMove.turnMessage();
-                        GameDriver.setBottomText(bottomMessage);
-                        // Update the GridPane to represent the new board
-                        GameDriver.drawUpdatedBoard();
-
-                        if (move.movingPiece.getColor() == Side.WHITE) {
-                            MovesTableCell moveCell = new MovesTableCell();
-                            moveCell.setText(move.toString());
-                            moveCell.getStyleClass().add("move-table-cell");
-                            GameDriver.movesPane.add(moveCell, 0, GameDriver.moveCounter);
-                        } else {
-                            MovesTableCell moveCell = new MovesTableCell();
-                            moveCell.setText(move.toString());
-                            moveCell.getStyleClass().add("move-table-cell");
-                            GameDriver.movesPane.add(moveCell, 1, GameDriver.moveCounter);
-                            GameDriver.moveCounter += 1;
-                        }
-
-
-                        // Play piece_move.wav file
-                        try {
-                            InputStream inputStream = getClass().getResourceAsStream("img_assets/move_sound.wav");
-                            AudioStream audioStream = new AudioStream(inputStream);
-                            AudioPlayer.player.start(audioStream);
-                        } catch (Exception e){
-                            System.out.println("file not found? ");
-                        }
-
-                        // If a player is mated throw the mating alert message
-                        if (GameDriver.activeGameBoard.getCurrentPlayer().isMated()) {
-                            try {
-                                InputStream inputStream = getClass().getResourceAsStream("img_assets/cormvat.wav");
-                                AudioStream audioStream = new AudioStream(inputStream);
-                                AudioPlayer.player.start(audioStream);
-                            } catch (Exception e){
-                                System.out.println("file not found? ");
-                            }
-                            GameUtilities.throwMateAlert(GameDriver.mateAlert,
-                                    GameDriver.activeGameBoard.getCurrentPlayer().getOpponent().getSide().name());
-                        }*/
                     } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
                         GameDriver.throwPlayerInCheckMessage();
                     }

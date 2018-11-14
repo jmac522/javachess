@@ -6,8 +6,7 @@
 *   - An enum PieceType for checking the pieces type (ex. useful for finding a king)
 * Piece contains methods for:
 *   = Calculating all legal moves for a given piece
-*   = Moving a piece based on a passed move object (Generates new piece. TODO: Consider building cache for
-*   all possible piece locations )
+*   = Moving a piece based on a passed move object (Generates new piece.)
 *
 *                                                                                                       */
 
@@ -47,10 +46,6 @@ public abstract class Piece {
     		this.firstMove == otherPiece.isFirstMove());
     }
     
-    @Override public int hashCode() {
-    	// TODO: Implament hash code
-    	return 0;
-    }
 
     //getters
     public Side getColor() {
@@ -96,11 +91,12 @@ public abstract class Piece {
             @Override
             public double getPieceAdjustedHeuristic(Side side, int location) {
                 if (side == Side.BLACK) {
-                    //return GameUtilities.BLACK_PAWN_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                   double offset = GameUtilities.BLACK_PAWN_PIECE_SQUARE[location];
+                   return offset - this.getBaseHeuristic();
+                    // return - this.getBaseHeuristic();
                 } else {
-                    //return GameUtilities.WHITE_PAWN_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                   return GameUtilities.WHITE_PAWN_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                   // return this.getBaseHeuristic();
                 }
             }
         },
@@ -123,11 +119,11 @@ public abstract class Piece {
             @Override
             public double getPieceAdjustedHeuristic(Side side, int location) {
                 if (side == Side.BLACK) {
-                    //return GameUtilities.BLACK_KNIGHT_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.BLACK_KNIGHT_PIECE_SQUARE[location] - this.getBaseHeuristic();
+                    // return - this.getBaseHeuristic();
                 } else {
-                    //return GameUtilities.WHITE_KNIGHT_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.WHITE_KNIGHT_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    //  return this.getBaseHeuristic();
                 }
             }
         },
@@ -150,11 +146,11 @@ public abstract class Piece {
             @Override
             public double getPieceAdjustedHeuristic(Side side, int location) {
                 if (side == Side.BLACK) {
-                    //return GameUtilities.BLACK_BISHOP_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.BLACK_BISHOP_PIECE_SQUARE[location] - this.getBaseHeuristic();
+                    // return - this.getBaseHeuristic();
                 } else {
-                    //return GameUtilities.WHITE_BISHOP_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.WHITE_BISHOP_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    // return this.getBaseHeuristic();
                 }
             }
         },
@@ -177,11 +173,11 @@ public abstract class Piece {
             @Override
             public double getPieceAdjustedHeuristic(Side side, int location) {
                 if (side == Side.BLACK) {
-                    //return GameUtilities.BLACK_ROOK_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.BLACK_ROOK_PIECE_SQUARE[location] - this.getBaseHeuristic();
+                    // return - this.getBaseHeuristic();
                 } else {
-                    //return GameUtilities.WHITE_ROOK_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.WHITE_ROOK_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    // return this.getBaseHeuristic();
                 }
             }
         },
@@ -204,11 +200,11 @@ public abstract class Piece {
             @Override
             public double getPieceAdjustedHeuristic(Side side, int location) {
                 if (side == Side.BLACK) {
-                    //return GameUtilities.BLACK_QUEEN_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.BLACK_QUEEN_PIECE_SQUARE[location] - this.getBaseHeuristic();
+                    // return - this.getBaseHeuristic();
                 } else {
-                    //return GameUtilities.WHITE_QUEEN_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.WHITE_QUEEN_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    // return this.getBaseHeuristic();
                 }
             }
         },
@@ -231,11 +227,11 @@ public abstract class Piece {
             @Override
             public double getPieceAdjustedHeuristic(Side side, int location) {
                 if (side == Side.BLACK) {
-                    //return GameUtilities.BLACK_KING_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.BLACK_KING_PIECE_SQUARE[location] - this.getBaseHeuristic();
+                    // return - this.getBaseHeuristic();
                 } else {
-                    //return GameUtilities.WHITE_KING_PIECE_SQUARE[location] + this.getBaseHeuristic();
-                    return this.getBaseHeuristic();
+                    return GameUtilities.WHITE_KING_PIECE_SQUARE[location] + this.getBaseHeuristic();
+                    // return this.getBaseHeuristic();
                 }
             }
         };

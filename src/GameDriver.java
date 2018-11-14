@@ -3,9 +3,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -13,15 +12,19 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Optional;
-// TODO: Methods/logic for making tiny piece icons of captured pieces, 2X2 gridpane for view, arraylist of captured
-// piece types for data representation 
+
 public class GameDriver extends Application {
-    // TODO: Extract as much as possible into an object to keep track of the GUI elements throughout a game
     public static BoardSquare selectedPieceSquare = null;
     public static Board activeGameBoard = Board.createInitialPosition(false);
     public static Side sideToMove = activeGameBoard.getCurrentPlayer().getSide();
     public static GridPane pane;
+    public static ScrollPane movesPaneScroller;
     public static GridPane movesPane = new GridPane();
+    public static VBox whiteMovesStack = new VBox();
+    public static VBox blackMovesStack = new VBox();
+    public static GridPane capturedPiecePane = new GridPane();
+    public static int capturedWhite = 0;
+    public static int capturedBlack = 0;
     public static int moveCounter = 1;
     public static Text bottomText;
     public static Alert mateAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -32,6 +35,8 @@ public class GameDriver extends Application {
     public static ToggleGroup difficultyToggleGroup;
     public static ToggleGroup modeToggleGroup;
     public static boolean isVsComputer = false;
+    public static boolean isHard = false;
+    public static BenchmarkTracker benchmarkTracker = new BenchmarkTracker(new Text(), 0);
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException{
@@ -45,12 +50,26 @@ public class GameDriver extends Application {
 
 
         // Grid pane which will hold the list of moves that have been executed so far
-
-//        for (int i = 0; i < 32; i++) {
-//            movesPane.add(new MovesTableCell(), (i % 2), (i / 2));
-//        }
-
         movesPane.setPadding(new Insets(5, 5, 5, 5));
+        movesPane.setId("move-container");
+
+        // New Test setup for move list
+        HBox testBox = new HBox();
+        testBox.setSpacing(5);
+        testBox.setPadding(new Insets(5));
+        whiteMovesStack.setPadding(new Insets(5));
+        whiteMovesStack.getStyleClass().add("white-move-panel");
+        blackMovesStack.setPadding(new Insets(5));
+        blackMovesStack.getStyleClass().add("black-move-panel");
+        testBox.getChildren().addAll(whiteMovesStack, blackMovesStack);
+
+
+        // Change back to movesPane if needed
+        movesPaneScroller = new ScrollPane(testBox);
+        movesPaneScroller.setPadding(new Insets(5));
+        movesPaneScroller.setMinWidth(190);
+        movesPaneScroller.setMaxHeight(600);
+        movesPaneScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
 
         // Border pane to hold board in center, moves on left, options on top, text info on bottom
@@ -60,56 +79,61 @@ public class GameDriver extends Application {
 
 
         // left will hold the list of moves
-        borderPane.setLeft(movesPane);
+        movesPaneScroller.getStyleClass().add("move-table-scroller");
+        borderPane.setLeft(movesPaneScroller);
 
-
+        // right will hold captured piece icons
+        capturedPiecePane.setMinWidth(90);
+        borderPane.setRight(capturedPiecePane);
 
 
         // top will have menu items for new game, etc.
         MenuBar menuBar = new MenuBar();
         Menu mainMenu = new Menu("Menu");
         // submenu holding game mode
-        Menu modeSubMenu = new Menu("Game Mode");
+        Menu modeSubMenu = new Menu("New Game");
         // submenu holding difficulty
         Menu difficultySubMenu = new Menu("Computer Difficulty");
         // menu item to start a new game
-        MenuItem newGame = new MenuItem("New Game");
-        newGame.setOnAction(e -> newGame());
+        //  MenuItem newGame = new MenuItem("New Game");
+        //newGame.setOnAction(e -> newGame());
 
 
         // Mode Selection items and Toggle group
-        // TODO: refactor strings into enums with toString or Pretty print method
+
         RadioMenuItem humanVsHuman = new RadioMenuItem("Human vs Human");
         humanVsHuman.setSelected(true);
         humanVsHuman.setOnAction(e -> modeSelected(humanVsHuman));
         selectedMode = humanVsHuman;
         RadioMenuItem humanVsComputer = new RadioMenuItem("Human vs Computer");
         humanVsComputer.setOnAction(e -> modeSelected(humanVsComputer));
-        RadioMenuItem computerVsComputer = new RadioMenuItem("Computer vs Computer");
-        computerVsComputer.setOnAction(event -> modeSelected(computerVsComputer));
+//        RadioMenuItem computerVsComputer = new RadioMenuItem("Computer vs Computer");
+//        computerVsComputer.setOnAction(event -> modeSelected(computerVsComputer));
 
         modeToggleGroup = new ToggleGroup();
         modeToggleGroup.getToggles().add(humanVsHuman);
         modeToggleGroup.selectToggle(humanVsHuman);
         modeToggleGroup.getToggles().add(humanVsComputer);
-        modeToggleGroup.getToggles().add(computerVsComputer);
+//        modeToggleGroup.getToggles().add(computerVsComputer);
 
 
         // Difficulty selection menu items and toggle group
         RadioMenuItem lowDifficulty = new RadioMenuItem("Low");
         lowDifficulty.setSelected(true);
+        lowDifficulty.setOnAction(e -> difficultySelected(lowDifficulty));
         selectedDifficulty = lowDifficulty;
-        RadioMenuItem mediumDifficulty = new RadioMenuItem("Medium");
+        // RadioMenuItem mediumDifficulty = new RadioMenuItem("Medium");
         RadioMenuItem highDifficulty = new RadioMenuItem("High");
+        highDifficulty.setOnAction(event -> difficultySelected(highDifficulty));
 
         difficultyToggleGroup = new ToggleGroup();
         difficultyToggleGroup.getToggles().add(lowDifficulty);
-        difficultyToggleGroup.getToggles().add(mediumDifficulty);
+        //difficultyToggleGroup.getToggles().add(mediumDifficulty);
         difficultyToggleGroup.getToggles().add(highDifficulty);
 
-        modeSubMenu.getItems().addAll(humanVsHuman, humanVsComputer, computerVsComputer);
-        difficultySubMenu.getItems().addAll(lowDifficulty, mediumDifficulty, highDifficulty);
-        mainMenu.getItems().addAll(newGame, modeSubMenu, difficultySubMenu);
+        modeSubMenu.getItems().addAll(humanVsHuman, humanVsComputer);
+        difficultySubMenu.getItems().addAll(lowDifficulty, highDifficulty);
+        mainMenu.getItems().addAll( modeSubMenu, difficultySubMenu);
         menuBar.getMenus().add(mainMenu);
         menuBar.getStyleClass().add("top-menu");
         borderPane.setTop(menuBar);
@@ -122,17 +146,25 @@ public class GameDriver extends Application {
         bottomBox.setAlignment(Pos.CENTER_LEFT);
         bottomBox.setPadding(new Insets(10));
         bottomText = new Text();
+        bottomText.getStyleClass().add("bottom-text-content");
         setBottomText(Side.WHITE.turnMessage());
-        bottomBox.getChildren().add(bottomText);
+        Region spacingRegion = new Region();
+        spacingRegion.setMinWidth(500);
+        bottomBox.setHgrow(spacingRegion, Priority.ALWAYS);
+        bottomBox.getChildren().addAll(bottomText, spacingRegion, benchmarkTracker.getBenchmarkText());
+        bottomBox.getStyleClass().add("bottom-text");
         borderPane.setBottom(bottomBox);
 
+        borderPane.setId("main-pane");
+
         File cssFile = new File("style.css");
-        Scene scene = new Scene(borderPane, 800, 800);
+        Scene scene = new Scene(borderPane, 900, 650);
         scene.getStylesheets().clear();
         scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Java Chess");
+        primaryStage.getIcons().add(new Image(GameDriver.class.getResourceAsStream("img_assets/white_knight.png")));
         primaryStage.show();
     }
 
@@ -150,6 +182,15 @@ public class GameDriver extends Application {
             throwNewGameConfirmation();
             isVsComputer = true;
             newGame();
+        }
+    }
+
+    private void difficultySelected(RadioMenuItem selectedItem) {
+        String selectedString = selectedItem.getText();
+        if (selectedString == "Low") {
+            isHard = false;
+        } else {
+            isHard = true;
         }
     }
 
@@ -202,24 +243,30 @@ public class GameDriver extends Application {
         bottomText.setText("White to Move!");
         moveCounter = 1;
         movesPane.getChildren().clear();
+        capturedPiecePane.getChildren().clear();
+        capturedWhite = 0;
+        capturedBlack = 0;
+        blackMovesStack.getChildren().clear();
+        whiteMovesStack.getChildren().clear();
         setupMovesPane();
     }
 
     private static void setupMovesPane() {
         MovesTableCell whiteCell = new MovesTableCell();
         whiteCell.setText("White");
-        whiteCell.setStyle("-fx-font: 10 arial;");
+        whiteCell.underlineProperty().setValue(true);
+       whiteCell.setStyle("-fx-font: 14 verdana;");
 
         MovesTableCell blackCell = new MovesTableCell();
         blackCell.setText("Black");
-        blackCell.setStyle("-fx-font: 10 arial;");
+        blackCell.underlineProperty().setValue(true);
+        blackCell.setStyle("-fx-font: 14 verdana;");
 
         movesPane.add(whiteCell, 0, 0);
         movesPane.add(blackCell, 1, 0);
-    }
 
-    public static void blankBoard(GridPane pane) {
-
+        whiteMovesStack.getChildren().add(whiteCell);
+        blackMovesStack.getChildren().add(blackCell);
     }
 
     public static void setBottomText(String text) {

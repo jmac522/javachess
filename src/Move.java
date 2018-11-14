@@ -14,11 +14,7 @@ public abstract class Move {
 		this.movingTo = movingTo;
 	}
 
-	@Override
-	public int hashCode() {
-		// TODO: Implament hashcode
-		return 0;
-	}
+
 
 	@Override
 	public boolean equals(final Object other) {
@@ -82,21 +78,4 @@ public abstract class Move {
         return builder.build();
     }
 
-
-    public static class MoveFactory {
-
-		private MoveFactory() {
-			throw new RuntimeException("Can't instantiate!");
-		}
-
-		public static Move createMove(final Board board, final int currentLocation, final int movingTo) {
-			for (final Move move : board.getAllLegalMoves()) {
-				if(move.getCurrentLocation() == currentLocation &&
-				   move.getMovingTo() == movingTo) {
-					return move;
-				}
-			}
-			return null;
-		}
-	}
 }

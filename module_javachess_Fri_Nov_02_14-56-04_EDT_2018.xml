@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_javachess" default="compile.module.javachess">
+  <dirname property="module.javachess.basedir" file="${ant.file.module_javachess}"/>
+  
+  <property name="module.jdk.home.javachess" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.javachess" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.javachess" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.javachess" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="javachess.output.dir" value="${module.javachess.basedir}/out/production/JavaChess"/>
+  <property name="javachess.testoutput.dir" value="${module.javachess.basedir}/out/test/JavaChess"/>
+  
+  <path id="javachess.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="javachess.module.production.classpath">
+    <path refid="${module.jdk.classpath.javachess}"/>
+  </path>
+  
+  <path id="javachess.runtime.production.module.classpath">
+    <pathelement location="${javachess.output.dir}"/>
+  </path>
+  
+  <path id="javachess.module.classpath">
+    <path refid="${module.jdk.classpath.javachess}"/>
+    <pathelement location="${javachess.output.dir}"/>
+  </path>
+  
+  <path id="javachess.runtime.module.classpath">
+    <pathelement location="${javachess.testoutput.dir}"/>
+    <pathelement location="${javachess.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.javachess">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.javachess">
+    <patternset refid="excluded.from.module.javachess"/>
+  </patternset>
+  
+  <path id="javachess.module.sourcepath">
+    <dirset dir="${module.javachess.basedir}">
+      <include name="src"/>
+      <include name="src/img_assets"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.javachess" depends="compile.module.javachess.production,compile.module.javachess.tests" description="Compile module JavaChess"/>
+  
+  <target name="compile.module.javachess.production" depends="register.custom.compilers" description="Compile module JavaChess; production classes">
+    <mkdir dir="${javachess.output.dir}"/>
+    <javac2 destdir="${javachess.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.javachess}/javac">
+      <compilerarg line="${compiler.args.javachess}"/>
+      <bootclasspath refid="javachess.module.bootclasspath"/>
+      <classpath refid="javachess.module.production.classpath"/>
+      <src refid="javachess.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.javachess"/>
+    </javac2>
+    
+    <copy todir="${javachess.output.dir}">
+      <fileset dir="${module.javachess.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.javachess.basedir}/src/img_assets">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.javachess.tests" depends="register.custom.compilers,compile.module.javachess.production" description="compile module JavaChess; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.javachess" description="cleanup module">
+    <delete dir="${javachess.output.dir}"/>
+    <delete dir="${javachess.testoutput.dir}"/>
+  </target>
+</project>

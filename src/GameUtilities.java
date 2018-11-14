@@ -4,7 +4,6 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -16,8 +15,6 @@ public class GameUtilities {
     public static final boolean[] COLUMN_H = generateColumnArray(7);
     public static final boolean[] COLUMN_B = generateColumnArray(1);
     public static final boolean[] COLUMN_G = generateColumnArray(6);
-    public static final boolean[] ROW_TWO = generateRowArray(2);
-    public static final boolean[] ROW_SEVEN = generateRowArray(7);
     public static final int TOTAL_TILES = 64;
     public static final int TILES_PER_ROW = 8;
     public static final HashMap<Integer, String> moveNameLookup = generateMoveNameLookup();
@@ -31,7 +28,7 @@ public class GameUtilities {
                                                              -2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0,
                                                              -1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0,
                                                              2.0 , 2.0 , 0.0 , 0.0 , 0.0 , 0.0 , 2.0 , 2.0 ,
-                                                             2.0 , 2.0 , 1.0 , 0.0 , 0.0 , 1.0 , 3.0 , 2.0 };
+                                                             2.0 , 3.0 , 1.0 , 0.0 , 0.0 , 1.0 , 3.0 , 2.0 };
     public static final double[] BLACK_KING_PIECE_SQUARE = reverseArray(WHITE_KING_PIECE_SQUARE);
 
     public static final double[] WHITE_QUEEN_PIECE_SQUARE = { -2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0,
@@ -79,10 +76,10 @@ public class GameUtilities {
     public static final double[] WHITE_PAWN_PIECE_SQUARE = { 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 ,
                                                              5.0 , 5.0 , 5.0 , 5.0 , 5.0 , 5.0 , 5.0 , 5.0 ,
                                                              1.0 , 1.0 , 2.0 , 3.0 , 3.0 , 2.0 , 1.0 , 1.0 ,
-                                                             -3.0, 0.5 , 1.5 , 2.0 , 2.0 , 1.5 , 0.5 , -3.0,
-                                                             0.5 , 0.5 , 1.0 , 2.5 , 2.5 , 1.0 , 0.5 , 0.5 ,
-                                                             0.5 , -0.5, -1.0, 0.0 , 0.0 , -1.0, -0.5, 0.5 ,
-                                                             5.0 , 1.0 , 1.0 , -2.0, -2.0, 1.0 , 1.0 , -2.0,
+                                                             0.5 ,  0.5,  1.0,  2.5,  2.5,  1.0,  0.5,  0.5,
+                                                             0.0 ,  0.0,  0.0,  2.0,  2.0,  0.0,  0.0,  0.0,
+                                                             0.5 , -0.5, -1.0,  0.0,  0.0, -1.0, -0.5,  0.5,
+                                                              0.5,  1.0, 1.0,  -2.0, -2.0,  1.0,  1.0,  0.5,
                                                              0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 };
     public static final double[] BLACK_PAWN_PIECE_SQUARE = reverseArray(WHITE_PAWN_PIECE_SQUARE);
 
@@ -163,7 +160,6 @@ public class GameUtilities {
     }
 
     // Method to update gamedriver when executing a move
-    // TODO: Extract spaghetti into clean tasty methods
     public static void updateBoard(Move move) {
         // Execute the move if it's status shows it was successful, returns the new board object
         GameDriver.activeGameBoard = move.execute();
@@ -173,8 +169,8 @@ public class GameUtilities {
         // Update the game's side to move based on the board that is returned
         GameDriver.sideToMove = currentPlayer.getSide();
 
+        // Update the bottom message based on turn, and if active player is currently in check
         String bottomMessage = "";
-        //
         if (GameDriver.activeGameBoard.getCurrentPlayer().isInCheck() &&
                 !GameDriver.activeGameBoard.getCurrentPlayer().isMated()) {
             bottomMessage += "Check! ";
@@ -182,18 +178,44 @@ public class GameUtilities {
         bottomMessage += GameDriver.sideToMove.turnMessage();
         GameDriver.setBottomText(bottomMessage);
         GameDriver.drawUpdatedBoard();
+
+        // Append the move notation for the executed move based on if white or black made teh move
         if (move.movingPiece.getColor() == Side.WHITE) {
             MovesTableCell moveCell = new MovesTableCell();
             moveCell.setText(move.toString());
             moveCell.getStyleClass().add("move-table-cell");
             GameDriver.movesPane.add(moveCell, 0, GameDriver.moveCounter);
+            GameDriver.whiteMovesStack.getChildren().add(moveCell);
+
+            // If a piece is being captured, add the appropriate captured piece icon
+            if (move instanceof  CaptureMove || move instanceof  PawnCaptureMove ||
+            move instanceof EnPassantCapture) {
+                String pieceCSS = move.getAttackedPiece().color.toString() +
+                        move.getAttackedPiece().getPieceType().toString() + "-icon";
+                CapturedPieceCell capturedPieceCell = new CapturedPieceCell(pieceCSS);
+                GameDriver.capturedPiecePane.add(capturedPieceCell, 1, GameDriver.capturedBlack);
+                GameDriver.capturedBlack += 1;
+            }
         } else {
             MovesTableCell moveCell = new MovesTableCell();
             moveCell.setText(move.toString());
             moveCell.getStyleClass().add("move-table-cell");
             GameDriver.movesPane.add(moveCell, 1, GameDriver.moveCounter);
+            GameDriver.blackMovesStack.getChildren().add(moveCell);
             GameDriver.moveCounter += 1;
+
+            // If a piece is being catpured, add the appropriate captured piece icon
+            if (move instanceof  CaptureMove || move instanceof  PawnCaptureMove ||
+            move instanceof EnPassantCapture) {
+                String pieceCSS = move.getAttackedPiece().color.toString() +
+                        move.getAttackedPiece().getPieceType().toString() + "-icon";
+                CapturedPieceCell capturedPieceCell = new CapturedPieceCell(pieceCSS);
+                GameDriver.capturedPiecePane.add(capturedPieceCell, 0, GameDriver.capturedWhite);
+                GameDriver.capturedWhite += 1;
+            }
         }
+
+        // Play audio for making the associated move
         try {
             InputStream inputStream = GameUtilities.class.getResourceAsStream("img_assets/move_sound.wav");
             AudioStream audioStream = new AudioStream(inputStream);
@@ -203,8 +225,7 @@ public class GameUtilities {
         }
         // If a player is checkmated throw an alert message
         if (GameDriver.activeGameBoard.getCurrentPlayer().isMated()) {
-            GameUtilities.throwMateAlert(GameDriver.mateAlert,
-                    GameDriver.activeGameBoard.getCurrentPlayer().getOpponent().getSide().name());
+            // Play victory music
             try {
                 InputStream inputStream = GameUtilities.class.getResourceAsStream("img_assets/cormvat.wav");
                 AudioStream audioStream = new AudioStream(inputStream);
@@ -212,12 +233,23 @@ public class GameUtilities {
             } catch (Exception e){
                 System.out.println("file not found? ");
             }
+            // throw the alert
+            GameUtilities.throwMateAlert(GameDriver.mateAlert,
+                    GameDriver.activeGameBoard.getCurrentPlayer().getOpponent().getSide().name());
         } else if (currentPlayer.getPlayerType() == Player.PlayerType.COMPUTER) {
-            // TimeUnit.SECONDS.sleep((long) 0.5);
-            currentPlayer.miniMaxRootMove(4, GameDriver.activeGameBoard, true);
+            // If after a move, the new player to move is a computer player, use the appropriate move method based
+            // on the difficulty level
+            if (GameDriver.isHard) {
+                currentPlayer.miniMaxRootMove(3, GameDriver.activeGameBoard, true);
+            } else {
+                try {
+                    TimeUnit.SECONDS.sleep((long) 0.5);
+                    currentPlayer.computerRandomMove(currentPlayer);
+                } catch (Exception e) {
+                    System.out.println("Random move desync");
+                }
+            }
         }
-
-
     }
 
     private static HashMap<Integer, String> generateMoveNameLookup() {

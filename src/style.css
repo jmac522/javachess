@@ -1,5 +1,49 @@
+#main-pane {
+     -fx-background-image: url("img_assets/marble_top.jpg");
+}
+
+#move-container {
+   -fx-background-color: transparent;
+}
+
+.white-move-panel {
+     -fx-background-color: rgba(243, 243, 243, 1);
+     -fx-background-radius: 5;
+     -fx-text-color: rgba(70, 70, 70, 1);
+     -fx-text-fill: rgba(70, 70, 70, 1);
+ }
+
+ .white-move-panel .move-table-cell {
+      -fx-text-color: rgba(70, 70, 70, 1);
+      -fx-text-fill: rgba(70, 70, 70, 1);
+      -fx-alignment: center ;
+ }
+
+ .black-move-panel {
+     -fx-background-color: rgba(70, 70, 70, 1);
+     -fx-background-radius: 5;
+    -fx-text-color: rgba(243, 243, 243, 1);
+    -fx-text-fill: rgba(243, 243, 243, 1);
+ }
+
+ .black-move-panel > .move-table-cell {
+      -fx-text-color: rgba(243, 243, 243, 1);
+      -fx-text-fill: rgba(243, 243, 243, 1);
+     -fx-alignment: center ;
+ }
+
+ .bottom-text {
+   -fx-background-radius: 0;
+   -fx-background-color: rgba(52, 52, 52, 0.7);
+ }
+
+ .bottom-text-content {
+    -fx-text-color: rgba(243, 243, 243, 1);
+    -fx-fill: rgba(243, 243, 243, 1);
+ }
+
 .dark-board-square {
-    -fx-background-color: rgba(171, 76, 22, 1) ;
+    -fx-background-color: rgba(70, 70, 70, 1) ;
     -fx-border-color: black;
     -fx-text-fill: white;
     -fx-text-alignment: center
@@ -8,7 +52,7 @@
 .light-board-square {
     -fx-border-color: black;
     -fx-text-fill: white;
-    -fx-background-color: rgba(239, 199, 155, 1);
+    -fx-background-color: rgba(243, 243, 243, 1);
     -fx-text-alignment: center
 }
 
@@ -129,7 +173,91 @@
 }
 
 .move-table-cell {
-    -fx-font: 10 arial;
-    -fx-border-color: black;
-    -fx-text-color: black;
+    -fx-font: 10 verdana;
+    -fx-border-color: transparent;
 }
+
+.move-table-scroller {
+  -fx-background: rgba(52, 52, 52, 0.1);
+  -fx-background-radius: 5;
+   -fx-background-color: transparent;
+}
+
+
+.white-pawn-icon {
+    -fx-background-image: url("img_assets/white_pawn.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.black-pawn-icon {
+    -fx-background-image: url("img_assets/black_pawn.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.white-bishop-icon {
+    -fx-background-image: url("img_assets/white_bishop.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.black-bishop-icon {
+    -fx-background-image: url("img_assets/black_bishop.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.white-knight-icon {
+    -fx-background-image: url("img_assets/white_knight.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.black-knight-icon {
+    -fx-background-image: url("img_assets/black_knight.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.white-rook-icon {
+    -fx-background-image: url("img_assets/white_rook.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.black-rook-icon {
+    -fx-background-image: url("img_assets/black_rook.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.white-queen-icon {
+    -fx-background-image: url("img_assets/white_queen.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.black-queen-icon {
+    -fx-background-image: url("img_assets/black_queen.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.white-king-icon {
+    -fx-background-image: url("img_assets/white_king.png");
+    -fx-background-repeat: none;
+    -fx-background-position: center center;
+}
+
+.black-king-icon {
+    -fx-background-image: url("img_assets/black_king.png");
+    -fx-background-repeat: none;
+
+    -fx-background-position: center center;
+}
+
+.icon-size {
+   -fx-background-size: 35 35;
+}
+
