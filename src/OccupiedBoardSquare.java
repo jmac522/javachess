@@ -1,12 +1,5 @@
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-
-import java.io.File;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
+
 
 public class OccupiedBoardSquare extends BoardSquare {
     // An occupied square also has a piece object in addition to a location
@@ -84,6 +77,8 @@ public class OccupiedBoardSquare extends BoardSquare {
                     Player currentPlayer = GameDriver.activeGameBoard.getCurrentPlayer();
                     piecesLegalMoves.addAll(currentPlayer.calculateKingCastles(playerLegalMoves, opponentLegalMoves));
                 }
+
+                // If the piece is a promoting pawn, get the players promotion choice
                 for (final Move move : piecesLegalMoves) {
                     int destination = move.getMovingTo();
                     BoardSquare destinationSquare = GameDriver.activeGameBoard.getBoardSquare(destination);
@@ -97,17 +92,36 @@ public class OccupiedBoardSquare extends BoardSquare {
                     // handle checking if this is a move selection to capture an opposing piece
                     Piece selectedPiece = GameDriver.selectedPieceSquare.getPiece();
                     Collection<Move> selectedPieceMoves = selectedPiece.getLegalMoves(GameDriver.activeGameBoard);
+                    // If the piece is a promoting pawn, get the players promotion choice
+                    if (selectedPiece.pieceType == Piece.PieceType.PAWN) {
+                        if (((selectedPiece.color == Side.WHITE && selectedPiece.locationOnBoard >= 8 && selectedPiece.locationOnBoard <= 15) ||
+                                (selectedPiece.color == Side.BLACK && selectedPiece.locationOnBoard >= 48 && selectedPiece.locationOnBoard <= 55))) {
+                            GameDriver.throwGetPromotionChoice();
+                        }
+                    }
                     for (final Move move: selectedPieceMoves) {
                         int destination = move.getMovingTo();
                         BoardSquare destinationSquare = GameDriver.activeGameBoard.getBoardSquare(destination);
                         destinationSquare.getStyleClass().remove("empty-legal-move-board-square");
                         destinationSquare.getStyleClass().remove("attacked-board-square");
                         if (this.location == move.movingTo) {
-                            MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
-                            if (me.getMoveStatus() == MoveStatus.DONE) {
-                                GameUtilities.updateBoard(move);
-                            } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
-                                GameDriver.throwPlayerInCheckMessage();
+                            if ( move instanceof PromotionCaptureMove) {
+                                if (((PromotionCaptureMove) move).getPromotionChoice() ==
+                                    GameDriver.activeGameBoard.getCurrentPlayer().getPromotionChoice()) {
+                                    MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
+                                    if (me.getMoveStatus() == MoveStatus.DONE) {
+                                        GameUtilities.updateBoard(move);
+                                    } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
+                                        GameDriver.throwPlayerInCheckMessage();
+                                    }
+                                }
+                            } else {
+                                MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
+                                if (me.getMoveStatus() == MoveStatus.DONE) {
+                                    GameUtilities.updateBoard(move);
+                                } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
+                                    GameDriver.throwPlayerInCheckMessage();
+                                }
                             }
                         }
                     }

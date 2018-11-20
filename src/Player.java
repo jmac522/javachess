@@ -1,7 +1,3 @@
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-
-import java.io.InputStream;
 import java.util.*;
 
 public abstract class Player {
@@ -12,7 +8,7 @@ public abstract class Player {
     protected final Collection<Move> legalMoves;
     private final boolean isInCheck;
     protected final PlayerType playerType;
-
+    private Piece.PieceType promotionChoice = Piece.PieceType.QUEEN;
 	
 	
 	// Super Constrcutor for Player objects
@@ -61,7 +57,7 @@ public abstract class Player {
         }
         // if we reach this point, there was no king on the board and this is
         // invalid (Should never get here)
-        // throw new RuntimeException("No King on board, invalid game.");
+        //throw new RuntimeException("No King on board, invalid game.");
         return null;
     }
 	
@@ -207,7 +203,7 @@ public abstract class Player {
         BenchmarkTracker tracker = GameDriver.benchmarkTracker;
         tracker.updateBenchmark(tracker.getPositionsCalculated() + 1);
 
-        // If desired search depth is reached, return the pieces heuristics.  Inverting value, as computer is currently
+        // If desired search depth is reached, return the piece's heuristics.  Inverting value, as computer is currently
         // always played by black
         if (depth == 0) {
             double testVar = -(board.getCurrentPlayer().getPlayersHeuristic(board));
@@ -280,6 +276,15 @@ public abstract class Player {
     public abstract Player getOpponent();
     public abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves,
                                                              Collection<Move> opponentLegalMoves);
+
+    public Piece.PieceType getPromotionChoice() {
+        return promotionChoice;
+    }
+
+    public void setPromotionChoice(Piece.PieceType promotionChoice) {
+        this.promotionChoice = promotionChoice;
+    }
+
     public enum PlayerType {
         HUMAN {
             @Override

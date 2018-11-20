@@ -31,8 +31,19 @@ public class Pawn extends Piece {
 
             if (directionalVectorOffset == 8 && !board.getBoardSquare(currentPotentialMove).isOccupied()) {
                 // if you're moving forward and the tile is not occupied add legal move
-
-                legalMoves.add(new PawnMove(board, this, currentPotentialMove));
+                if ((this.color == Side.WHITE && this.locationOnBoard >= 8 && this.locationOnBoard <= 16) ||
+                        (this.color == Side.BLACK && this.locationOnBoard >= 48 && this.locationOnBoard <= 55)) {
+                    legalMoves.add(new PassivePromotionMove(board, this,
+                                   currentPotentialMove, PieceType.QUEEN));
+                    legalMoves.add(new PassivePromotionMove(board, this,
+                            currentPotentialMove, PieceType.ROOK));
+                    legalMoves.add(new PassivePromotionMove(board, this,
+                            currentPotentialMove, PieceType.BISHOP));
+                    legalMoves.add(new PassivePromotionMove(board, this,
+                            currentPotentialMove, PieceType.KNIGHT));
+                } else {
+                    legalMoves.add(new PawnMove(board, this, currentPotentialMove));
+                }
             } else if (directionalVectorOffset == 16 && this.isFirstMove()) {
                 // if pawn has not moved yet, is on the appropriate rank for its side, and
                 // square directly in front is unoccupied, double move is possible
@@ -56,7 +67,20 @@ public class Pawn extends Piece {
                     final Side pieceColor = pieceOnSquare.getColor();
                     if (this.color != pieceColor) {
                         // if it is an opponent's piece, it can be captured
-                        legalMoves.add(new PawnCaptureMove(board, this, currentPotentialMove, pieceOnSquare));
+                        if ((this.color == Side.WHITE && this.locationOnBoard >= 8 && this.locationOnBoard <= 15) ||
+                            (this.color == Side.BLACK && this.locationOnBoard >= 48 && this.locationOnBoard <= 55)) {
+                            // This move will be a promotion move
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.QUEEN));
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.ROOK));
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.KNIGHT));
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.BISHOP));
+                        } else {
+                            legalMoves.add(new PawnCaptureMove(board, this, currentPotentialMove, pieceOnSquare));
+                        }
                     }
                 } else if (board.getEnPassantPawn() != null) {
                     // if there is an enPassantPawn related to the board, en Passant may be possible
@@ -85,7 +109,20 @@ public class Pawn extends Piece {
                     final Side pieceColor = pieceOnSquare.getColor();
                     if (this.color != pieceColor) {
                         // if it is an opponent's piece, it can be captured
-                        legalMoves.add(new PawnCaptureMove(board, this, currentPotentialMove, pieceOnSquare));
+                        if ((this.color == Side.WHITE && this.locationOnBoard >= 8 && this.locationOnBoard <= 15) ||
+                                (this.color == Side.BLACK && this.locationOnBoard >= 48 && this.locationOnBoard <= 55)) {
+                            // This move will be a promotion move
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.QUEEN));
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.ROOK));
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.KNIGHT));
+                            legalMoves.add(new PromotionCaptureMove(board, this,
+                                    currentPotentialMove, pieceOnSquare, PieceType.BISHOP));
+                        } else {
+                            legalMoves.add(new PawnCaptureMove(board, this, currentPotentialMove, pieceOnSquare));
+                        }
                     }
                 } else if (board.getEnPassantPawn() != null) {
                     // if there is an enPassantPawn related to the board, en Passant may be possible
@@ -113,6 +150,42 @@ public class Pawn extends Piece {
 	public Pawn movePiece(Move move) {
 		return new Pawn(move.getMovingTo(), move.getMovingPiece().getColor(), false);
 	}
+
+	public Piece promotePawn(Move move) {
+        if (!(move instanceof PassivePromotionMove || move instanceof PromotionCaptureMove)) {
+            throw new RuntimeException("Invalid move type!");
+        }
+        if ( move instanceof PassivePromotionMove) {
+            PassivePromotionMove passiveMove = (PassivePromotionMove) move;
+            switch (passiveMove.getPromotionChoice()) {
+                case QUEEN:
+                    return new Queen(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                case ROOK:
+                    return new Rook(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                case BISHOP:
+                    return new Bishop(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                case KNIGHT:
+                    return new Knight(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                default:
+                    throw new RuntimeException("Invalid promotion type!");
+            }
+        } else {
+            PromotionCaptureMove captureMove = (PromotionCaptureMove) move;
+            switch (captureMove.getPromotionChoice()) {
+                case QUEEN:
+                    return new Queen(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                case ROOK:
+                    return new Rook(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                case BISHOP:
+                    return new Bishop(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                case KNIGHT:
+                    return new Knight(move.getMovingTo(), move.getMovingPiece().getColor(), false);
+                default:
+                    throw new RuntimeException("Invalid promotion type!");
+            }
+        }
+
+    }
 
     @Override
     public String toString() {

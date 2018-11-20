@@ -30,6 +30,7 @@ public class GameDriver extends Application {
     public static Alert mateAlert = new Alert(Alert.AlertType.CONFIRMATION);
     public static Alert newGameConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
     public static Alert playerInCheckMessage = new Alert(Alert.AlertType.WARNING);
+    public static Alert getPromotionChoice = new Alert(Alert.AlertType.CONFIRMATION);
     public static RadioMenuItem selectedMode;
     public static RadioMenuItem selectedDifficulty;
     public static ToggleGroup difficultyToggleGroup;
@@ -157,7 +158,6 @@ public class GameDriver extends Application {
 
         borderPane.setId("main-pane");
 
-        File cssFile = new File("style.css");
         Scene scene = new Scene(borderPane, 900, 650);
         scene.getStylesheets().clear();
         scene.getStylesheets().add("style.css");
@@ -204,10 +204,37 @@ public class GameDriver extends Application {
         }
     }
 
+    public static void throwGetPromotionChoice() {
+        Optional<ButtonType> result = getPromotionChoice.showAndWait();
+
+        if (result.get().getText() == "Queen") {
+            activeGameBoard.getCurrentPlayer().setPromotionChoice(Piece.PieceType.QUEEN);
+        } else if (result.get().getText() == "Rook") {
+            activeGameBoard.getCurrentPlayer().setPromotionChoice(Piece.PieceType.ROOK);
+        } else if (result.get().getText() == "Bishop") {
+            activeGameBoard.getCurrentPlayer().setPromotionChoice(Piece.PieceType.BISHOP);
+        } else {
+            activeGameBoard.getCurrentPlayer().setPromotionChoice(Piece.PieceType.KNIGHT);
+        }
+    }
+
     private void setupNewGameConfirmation() {
         newGameConfirmation.setTitle("Are You Sure?");
         newGameConfirmation.setHeaderText("This action will start a new game.");
         newGameConfirmation.setContentText("Do you want to continue?");
+    }
+
+    private void setupGetPromotionChoice() {
+        getPromotionChoice.setTitle("Promotion Selection");
+        getPromotionChoice.setHeaderText("You have promoted a pawn!");
+        getPromotionChoice.setContentText("What would you like to promote to?");
+
+        ButtonType queenButton = new ButtonType("Queen");
+        ButtonType rookButton = new ButtonType("Rook");
+        ButtonType bishopButton = new ButtonType("Bishop");
+        ButtonType knightButton = new ButtonType("Knight");
+
+        getPromotionChoice.getButtonTypes().setAll(queenButton, rookButton, bishopButton, knightButton);
     }
 
     public static void throwPlayerInCheckMessage() {
@@ -225,6 +252,7 @@ public class GameDriver extends Application {
         GameUtilities.setUpMateAlert(mateAlert);
         setupNewGameConfirmation();
         setupPlayerInCheckMessage();
+        setupGetPromotionChoice();
         setupMovesPane();
     }
 

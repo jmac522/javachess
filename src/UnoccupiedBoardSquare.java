@@ -36,6 +36,14 @@ public class UnoccupiedBoardSquare extends BoardSquare {
                 Player currentPlayer = GameDriver.activeGameBoard.getCurrentPlayer();
                 selectedPieceMoves.addAll(currentPlayer.calculateKingCastles(playerLegalMoves, opponentLegalMoves));
             }
+
+            // If the piece is a promoting pawn, get the players promotion choice
+            if (selectedPiece.pieceType == Piece.PieceType.PAWN) {
+                if (((selectedPiece.color == Side.WHITE && selectedPiece.locationOnBoard >= 8 && selectedPiece.locationOnBoard <= 15) ||
+                    (selectedPiece.color == Side.BLACK && selectedPiece.locationOnBoard >= 48 && selectedPiece.locationOnBoard <= 55))) {
+                    GameDriver.throwGetPromotionChoice();
+                }
+            }
             // Loop through each of the selected piece's legal moves to the location the user just clicked
             for (final Move move: selectedPieceMoves) {
                 // Location of a legal move's destination
@@ -47,12 +55,24 @@ public class UnoccupiedBoardSquare extends BoardSquare {
                 destinationSquare.getStyleClass().remove("attacked-board-square");
                 // If the clicked square matches the destination of a move
                 if (this.location == move.movingTo) {
-                    // Attempt to execute the move
-                    MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
-                    if (me.getMoveStatus() == MoveStatus.DONE) {
-                        GameUtilities.updateBoard(move);
-                    } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
-                        GameDriver.throwPlayerInCheckMessage();
+                    if ( move instanceof PassivePromotionMove) {
+                        if (((PassivePromotionMove) move).getPromotionChoice() ==
+                                GameDriver.activeGameBoard.getCurrentPlayer().getPromotionChoice()) {
+                            MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
+                            if (me.getMoveStatus() == MoveStatus.DONE) {
+                                GameUtilities.updateBoard(move);
+                            } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
+                                GameDriver.throwPlayerInCheckMessage();
+                            }
+                        }
+                    } else {
+                        // Attempt to execute the move
+                        MoveExecution me = GameDriver.activeGameBoard.getCurrentPlayer().makeMove(move);
+                        if (me.getMoveStatus() == MoveStatus.DONE) {
+                            GameUtilities.updateBoard(move);
+                        } else if (me.getMoveStatus() == MoveStatus.PLAYER_IN_CHECK) {
+                            GameDriver.throwPlayerInCheckMessage();
+                        }
                     }
                 }
             }
